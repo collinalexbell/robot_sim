@@ -4,6 +4,7 @@
 #include <SDL/SDL.h>
 #include <string>
 #include <vector>
+#include <unordered_map>
 
 class Sim
 {
@@ -14,31 +15,41 @@ class Sim
         SDL_Surface* get_screen();
 
         //Returns the id for the gui_test
-        int start_gui_test_bool(char* test_text, bool desired_result);
+        unsigned int start_gui_test_bool(char* test_text, bool desired_result);
 
         bool get_gui_test_result(int test_id);
 
-        bool gui_test_finished(int test_id);
+        bool gui_test_finished(unsigned int test_id);
 
         bool step();
 
         void draw();
 
+        unsigned int add_drawable(SDL_Surface * surf, int x, int y);
+
+        SDL_Event event;
+        SDL_Surface *screen;
+
     private:
         struct Drawable{
             SDL_Surface* surf;
-            SDL_Rect offset;
+            SDL_Rect* offset;
+
+           /* ~Drawable(){
+                delete surf;
+                delete offset;
+            }
+            */
         };
 
         int screen_height;
         int screen_width;
-        SDL_Surface *screen;
         bool running;
         std::vector<bool> gui_tests;
-        SDL_Event event;
         bool bool_gui_test_finished = false;
         bool bool_gui_result = false;
-        std::vector<Drawable> things_to_draw;
+    public:
+        std::unordered_map<unsigned int, Drawable> things_to_draw;
 
 };
 

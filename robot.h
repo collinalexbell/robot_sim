@@ -6,7 +6,6 @@
 
 struct Radiation{
     //This pointer must always remain valid
-    SDL_Surface* image;
     Point location;
 };
 

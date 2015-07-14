@@ -10,15 +10,14 @@ TEST_CASE("Robot can set and return its position"){
     Point position;
 
     //get_position without a robot having a position should throw an exception
-    //std::cout << "test prints" << endl;
-    //REQUIRE_THROWS(position = robot->get_position());
+    REQUIRE_THROWS(position = robot->get_position());
 
 
-    //robot->set_position(5,8);
-    //position = robot->get_position();
+    robot->set_position(5,8);
+    position = robot->get_position();
 
-    //REQUIRE(position.x == 5);
-    //REQUIRE(position.y == 8);
+    REQUIRE(position.x == 5);
+    REQUIRE(position.y == 8);
 
 }
 
@@ -35,8 +34,7 @@ TEST_CASE("Robot can radiate light"){
     Radiation radiation = robot->radiate();
     REQUIRE(radiation.location.x == 5);
     REQUIRE(radiation.location.y == 7);
-    REQUIRE(typeid(radiation.image) == typeid(SDL_Surface));
-
+    REQUIRE(typeid(*radiation.image) == typeid(SDL_Surface));
 
 }
 

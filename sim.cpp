@@ -3,6 +3,11 @@
 #include <SDL/SDL_ttf.h>
 #include <string>
 #include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+#define MAX_ID 65535
 
 Sim::Sim(int w, int h){
     screen_width = w;
@@ -14,6 +19,7 @@ SDL_Surface* Sim::get_screen(){
 }
 
 void Sim::init(){
+    srand (time(NULL));
     SDL_Init(SDL_INIT_EVERYTHING);
     TTF_Init();
     screen = SDL_SetVideoMode(1080, 720, 32, SDL_SWSURFACE);
@@ -46,41 +52,47 @@ void Sim::quit_sdl(){
     SDL_Quit();
 }
 
-int Sim::start_gui_test_bool(char* test_text, bool desired_result){
+unsigned int Sim::start_gui_test_bool(char* test_text, bool desired_result){
     bool_gui_test_finished = false;
-    int rv = 1;
+    int rv = 0;
     TTF_Font *font = NULL;
     SDL_Surface *message = NULL;
     SDL_Surface *message2 = NULL;
-    SDL_Surface *full_message = NULL;
-    SDL_Rect yes_no_offset;
-    SDL_Rect full_message_offset;
+    SDL_Surface *full_message = SDL_CreateRGBSurface(0,1080, 720, 32,0,0,0,0);
+    SDL_Rect* yes_no_offset = new SDL_Rect();
+    SDL_Rect* full_message_offset = new SDL_Rect();
 
 
-    yes_no_offset.y = 120;
-    yes_no_offset.x = 0;
-    full_message_offset.x = 0;
-    full_message_offset.y = 50;
+    yes_no_offset->y = 120;
+    yes_no_offset->x = 0;
+    full_message_offset->x = 0;
+    full_message_offset->y = 50;
 
     SDL_Color textColor = { 255, 255, 255 };
     font = TTF_OpenFont( "opensans.ttf", 14 );
     message = TTF_RenderText_Solid( font, test_text, textColor );
+    std::cout << SDL_GetError();
     message2 = TTF_RenderText_Solid( font, "Press Y/N", textColor );
-    SDL_BlitSurface(message, NULL, full_message);
-    SDL_BlitSurface(message2, NULL, full_message, yes_no_offset);
+    std::cout << SDL_GetError();
+    int m1res = SDL_BlitSurface(message, NULL, full_message, NULL);
+    int m2res = SDL_BlitSurface(message2, NULL, full_message, yes_no_offset);
+    char buffer [60];
+    std::sprintf(buffer,"message1 result: %d, message2 result: %d",m1res, m2res);
 
-    
-    Drawable drawable = {full_message, offset};
-    things_to_draw.push_back(drawable);
+    Drawable drawable = {full_message, full_message_offset};
 
-    return rv;
+    //UUID max is max of unsigned int
+    unsigned int uuid = rand() % MAX_ID;
+    std::pair<unsigned int, Drawable> insert_me (uuid,drawable);
+    things_to_draw.insert(insert_me);
+
+    return uuid;
 }
 
 void Sim::draw(){
     SDL_FillRect(screen, NULL, 0x000000);
-    int i;
-    for (i = 0; i < things_to_draw.size(); i++){
-        SDL_BlitSurface(things_to_draw[i].surf, NULL, screen, &things_to_draw[i].offset);
+    for ( auto it = things_to_draw.begin(); it != things_to_draw.end(); ++it ){
+        SDL_BlitSurface(it->second.surf, NULL, screen,it->second.offset);
     } 
 }
 
@@ -107,8 +119,8 @@ bool Sim::step(){
     return true;
 }
 
-bool Sim::gui_test_finished(int test_id){
-    if(bool_gui_test_finished == true;){
+bool Sim::gui_test_finished(unsigned int test_id){
+    if(bool_gui_test_finished == true){
         things_to_draw.erase(test_id);
     }
     return bool_gui_test_finished;
@@ -116,6 +128,22 @@ bool Sim::gui_test_finished(int test_id){
 
 bool Sim::get_gui_test_result(int test_id){
     return bool_gui_result;
+}
+
+unsigned int Sim::add_drawable(SDL_Surface * surf, int x, int y){
+    SDL_Rect* offset =  new SDL_Rect();
+    offset->x = x;
+    offset->y = y;
+
+    Drawable drawable = {surf,offset};
+
+    unsigned int uuid = rand() % MAX_ID;
+
+    std::pair<unsigned int, Drawable> insert_me (uuid, drawable);
+    things_to_draw.insert(insert_me);
+    std::cout<< things_to_draw.size() << std::endl;
+
+    return uuid;
 }
 
 

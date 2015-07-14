@@ -2,18 +2,22 @@
 #include "../libs/catch.hpp"
 #include "../sim.h"
 #include <SDL/SDL.h>
+#include <SDL/SDL_image.h>
+#include <iostream>
+
+using namespace std;
 
 void gui_test(Sim* sim, char *text, bool result){
-    int test_id = sim->start_gui_test_bool(text, result);
-        bool gui_test_result = false;
+    unsigned int test_id = sim->start_gui_test_bool(text, result);
+    bool gui_test_result = false;
 
-        while(sim->step()){
-            if(sim->gui_test_finished(test_id)){
-                gui_test_result = sim->get_gui_test_result(test_id);
-                break;
-            }
+    while(sim->step()){
+        if(sim->gui_test_finished(test_id)){
+            gui_test_result = sim->get_gui_test_result(test_id);
+            break;
         }
-       REQUIRE( gui_test_result == result);
+    }
+    REQUIRE( gui_test_result == result);
 }
 
 TEST_CASE( "sim get_screen returns a screen", "[screen]" ) {
@@ -27,6 +31,19 @@ TEST_CASE( "sim gui_test works", "[gui_test]" ){
     sim->init();
     gui_test(sim, "Gui test works", true);
     gui_test(sim, "Gui test is broken", false);
+
+}
+
+TEST_CASE( "sim add_drawable"){
+    Sim *sim = new Sim(1080, 720);
+    sim->init();
+
+    SDL_Surface* torus = IMG_Load("tests/torus.png");
+    std::cout << "error " << SDL_GetError() << std::endl;
+    sim->add_drawable(torus, 300, 50);
+
+    gui_test(sim, "Sim loads and draws torus", true);
+    
 
 }
 

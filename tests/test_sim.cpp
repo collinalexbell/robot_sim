@@ -21,13 +21,13 @@ void gui_test(Sim* sim, char *text, bool result){
 }
 
 TEST_CASE( "sim get_screen returns a screen", "[screen]" ) {
-    Sim* sim = new Sim(1080, 720);
+    Sim* sim = new Sim(1080, 780);
     sim->init(); 
     REQUIRE(typeid(*(sim->get_screen())) == typeid(SDL_Surface));
 }
 
 TEST_CASE( "sim gui_test works", "[gui_test]" ){
-    Sim* sim = new Sim(1080, 720);
+    Sim* sim = new Sim(1080, 780);
     sim->init();
     gui_test(sim, "Gui test works", true);
     gui_test(sim, "Gui test is broken", false);
@@ -35,17 +35,19 @@ TEST_CASE( "sim gui_test works", "[gui_test]" ){
 }
 
 TEST_CASE( "sim add_drawable"){
-    Sim *sim = new Sim(1080, 720);
+    Sim *sim = new Sim(1080, 780);
     sim->init();
 
-    SDL_Surface* torus = IMG_Load("tests/torus.png");
+    SDL_Surface* torus_surf = IMG_Load("tests/torus.png");
+    Point p = {300, 50};
+    Basic_Drawable* torus = new Basic_Drawable(torus_surf, p);
     std::cout << "error " << SDL_GetError() << std::endl;
-    sim->add_drawable(torus, 300, 50);
+    
+    sim->add_drawable(torus);
 
     gui_test(sim, "Sim loads and draws torus", true);
-    
-
 }
+
 
 int main( int argc, char* argv[] )
 {

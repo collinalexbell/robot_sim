@@ -1,0 +1,2 @@
+ERROR zoom was set to null causing w and h to shrink to small :
+SOLUTION rotozoomSurface(SDL_Surface*, angle, zoom(MUST BE an number, cant be null), smooth);

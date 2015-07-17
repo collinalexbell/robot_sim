@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include "drawable.h"
 
 #define MAX_ID 65535
 
@@ -22,7 +23,7 @@ void Sim::init(){
     srand (time(NULL));
     SDL_Init(SDL_INIT_EVERYTHING);
     TTF_Init();
-    screen = SDL_SetVideoMode(1080, 720, 32, SDL_SWSURFACE);
+    screen = SDL_SetVideoMode(screen_width, screen_height, 32, SDL_SWSURFACE);
     running = true;
 
 #ifdef TEST_SDL_LOCK_OPTS
@@ -52,21 +53,19 @@ void Sim::quit_sdl(){
     SDL_Quit();
 }
 
-unsigned int Sim::start_gui_test_bool(char* test_text, bool desired_result){
+unsigned int Sim::start_gui_test_bool(char test_text[], bool desired_result){
     bool_gui_test_finished = false;
     int rv = 0;
     TTF_Font *font = NULL;
     SDL_Surface *message = NULL;
     SDL_Surface *message2 = NULL;
-    SDL_Surface *full_message = SDL_CreateRGBSurface(0,1080, 720, 32,0,0,0,0);
+    SDL_Surface *full_message = SDL_CreateRGBSurface(0,1080, 40, 32,0,0,0,0);
     SDL_Rect* yes_no_offset = new SDL_Rect();
     SDL_Rect* full_message_offset = new SDL_Rect();
 
 
-    yes_no_offset->y = 120;
+    yes_no_offset->y = 20;
     yes_no_offset->x = 0;
-    full_message_offset->x = 0;
-    full_message_offset->y = 50;
 
     SDL_Color textColor = { 255, 255, 255 };
     font = TTF_OpenFont( "opensans.ttf", 14 );
@@ -79,11 +78,13 @@ unsigned int Sim::start_gui_test_bool(char* test_text, bool desired_result){
     char buffer [60];
     std::sprintf(buffer,"message1 result: %d, message2 result: %d",m1res, m2res);
 
-    Drawable drawable = {full_message, full_message_offset};
+    Point p =  {0,720};
+    Basic_Drawable* gui_message = new Basic_Drawable(full_message, p);
 
     //UUID max is max of unsigned int
     unsigned int uuid = rand() % MAX_ID;
-    std::pair<unsigned int, Drawable> insert_me (uuid,drawable);
+    std::pair<unsigned int, Drawable*> insert_me;
+    insert_me = std::make_pair(uuid,gui_message);
     things_to_draw.insert(insert_me);
 
     return uuid;
@@ -92,7 +93,16 @@ unsigned int Sim::start_gui_test_bool(char* test_text, bool desired_result){
 void Sim::draw(){
     SDL_FillRect(screen, NULL, 0x000000);
     for ( auto it = things_to_draw.begin(); it != things_to_draw.end(); ++it ){
-        SDL_BlitSurface(it->second.surf, NULL, screen,it->second.offset);
+
+        //Offset from drawable
+        SDL_Rect *offset = new SDL_Rect();
+        offset->x = it->second->get_position().x;
+        offset->y = it->second->get_position().y;
+        
+        //Surf from drawable
+        SDL_Surface* surf = it->second->get_image();
+
+        SDL_BlitSurface(surf, NULL, screen, offset);
     } 
 }
 
@@ -130,20 +140,15 @@ bool Sim::get_gui_test_result(int test_id){
     return bool_gui_result;
 }
 
-unsigned int Sim::add_drawable(SDL_Surface * surf, int x, int y){
-    SDL_Rect* offset =  new SDL_Rect();
-    offset->x = x;
-    offset->y = y;
+unsigned int Sim::add_drawable(Drawable* drawable){
 
-    Drawable drawable = {surf,offset};
 
     unsigned int uuid = rand() % MAX_ID;
 
-    std::pair<unsigned int, Drawable> insert_me (uuid, drawable);
+    std::pair<unsigned int, Drawable*> insert_me (uuid, drawable);
     things_to_draw.insert(insert_me);
     std::cout<< things_to_draw.size() << std::endl;
 
     return uuid;
 }
-
 

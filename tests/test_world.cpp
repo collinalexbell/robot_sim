@@ -1,7 +1,7 @@
 #define CATCH_CONFIG_RUNNER
 #include "../libs/catch.hpp"
-#include "../sim.h"
-#include "../world.h"
+#include "sim.h"
+#include "world.h"
 #include <SDL/SDL.h>
 
 void gui_test(Sim* sim, char *text, bool result){

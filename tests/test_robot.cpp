@@ -1,9 +1,9 @@
 #define CATCH_CONFIG_RUNNER
 #include "../libs/catch.hpp"
-#include "../robot.h"
-#include "../world.h"
-#include "../point.h"
-#include "../sim.h"
+#include "robot.h"
+#include "world.h"
+#include "point.h"
+#include "sim.h"
 #include <SDL/SDL.h>
 #include <iostream>
 

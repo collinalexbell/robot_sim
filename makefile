@@ -20,6 +20,9 @@ robot.o: $(SRC)/robot.cpp $(LIB)/robot.h $(LIB)/point.h $(LIB)/drawable.h
 world.o: $(SRC)/world.cpp $(LIB)/world.h $(LIB)/robot.h $(LIB)/point.h $(LIB)/drawable.h
 	$(CLANG) $(SRC)/world.cpp
 
+spiking_nnet.o: $(SRC)/spiking_nnet.cpp $(LIB)/spiking_nnet.h
+	$(CLANG) $(SRC)/spiking_nnet.cpp
+
 drawable.h: point.h
 
 robot.h: point.h drawable.h
@@ -35,9 +38,9 @@ test_robot: robot.o sim.o
 test_world: robot.o world.o sim.o
 	$(LINK) -o $(BIN)/test_world world.o robot.o sim.o $(TEST)/test_world.cpp
 
-test_spiking_nnet: test_spiking_nnet.o spiking_nnet.o
-	$(CLANG) -o $(BIN)/test_spiking_nnet $(TEST)/test_spiking_nnet.cpp spiking_nnet.o  -std=c++11 -stdlib=libc++ -v -g
-	gdb tests/test_spiking_nnet
+test_spiking_nnet: spiking_nnet.o
+	clang++ -o $(BIN)/test_spiking_nnet $(TEST)/test_spiking_nnet.cpp spiking_nnet.o -I $(LIB) -std=c++11 -stdlib=libc++  -v
+	gdb bin/test_spiking_nnet
 
 clean:
 	rm *.o

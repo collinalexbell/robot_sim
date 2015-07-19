@@ -6,12 +6,35 @@
 #include <string>
 
 
-struct Neuron{
-    std::vector<Neuron*> inputs;
-    std::vector<double> weights;
-    std::vector<double> speeds;
+class Neuron{
+    //Static methods
+    public:
+        static void connect(Neuron*, Neuron*, double, double);
+    
+    //For neurons that are recieving stimuli
+    private:
+        std::unordered_map<Neuron*, double> weights;
+        std::unordered_map<Neuron*, double> speeds;
+    public:
+        double weight_for(Neuron*);
+        double speed_for(Neuron*);
+   
+    //For neurons that are sending stimuli
+    private:
+        std::vector<Neuron*> outputs;
 
-    void add_input(Neuron *n, double weight, double speed);
+    public:
+        Neuron* output_at(int);
+
+
+    //Methods for all types
+    private:
+        double stimulation;
+
+    public:
+        Neuron(){
+            stimulation = 0;
+        }
 };
 
 class Spiking_NNet{

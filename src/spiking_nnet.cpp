@@ -1,12 +1,35 @@
 #include "spiking_nnet.h"
 #include <vector>
 #include <stdexcept>
+#include <unordered_map>
 
 
-void Neuron::add_input(Neuron* n, double weight, double speed){
-    inputs.push_back(n);
-    weights.push_back(weight);
-    speeds.push_back(speed);
+void Neuron::connect(Neuron *from, Neuron *to, double weight, double speed){
+    //Notify from of to
+    from->outputs.push_back(to);
+
+    //Set the weight and speed in the to
+    //Weight
+    std::pair<Neuron*, double> weight_pair;
+    weight_pair = std::make_pair(from, weight);
+    to->weights.insert(weight_pair);
+
+    //Speed
+    std::pair<Neuron*, double> speed_pair;
+    speed_pair = std::make_pair(from, speed);
+    to->speeds.insert(speed_pair);
+}
+
+double Neuron::weight_for(Neuron *input){
+    return weights.at(input);
+}
+
+double Neuron::speed_for(Neuron *input){
+    return speeds.at(input);
+}
+
+Neuron* Neuron::output_at(int position){
+    return outputs.at(position);
 }
 
 Neuron* Spiking_NNet::add_neuron(){

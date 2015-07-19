@@ -1,7 +1,7 @@
 #define CATCH_CONFIG_RUNNER
 #include "../libs/catch.hpp"
 #include <vector>
-#include "../spiking_nnet.h"
+#include "spiking_nnet.h"
 
 
 TEST_CASE("Spiking nnet can add nuerons"){
@@ -62,22 +62,23 @@ TEST_CASE("Spiking nnet can associate names to neurons"){
 
 }
 
-TEST_CASE("Neurons can "){
+TEST_CASE("Neurons can add an output"){
     int i;
-    Neuron *output = new Neuron();
-    Neuron *in1 = new Neuron();
-    Neuron *in2 = new Neuron();
+    Neuron *input = new Neuron();
+    Neuron *out1 = new Neuron();
+    Neuron *out2 = new Neuron();
 
-    output->add_input(in1, .2, .4);
-    output->add_input(in2, .3, .5);
+    Neuron::connect(input, out1, .2, .3);
+    Neuron::connect(input, out2, .4, .5);
 
-    REQUIRE(output->inputs[0] == in1);
-    REQUIRE(output->inputs[1] == in2);
-    REQUIRE(output->weights[0] == .2);
-    REQUIRE(output->weights[1] == .3);
-    REQUIRE(output->speeds[0] == .4);
-    REQUIRE(output->speeds[1] == .5);
+    REQUIRE(input->output_at(0) == out1);
+    REQUIRE(input->output_at(1) == out2);
+    REQUIRE(out1->weight_for(input) == .2);
+    REQUIRE(out1->speed_for(input) == .3);
+    REQUIRE(out2->weight_for(input) == .4);
+    REQUIRE(out2->speed_for(input) == .5);
 }
+
 
 int main( int argc, char* argv[] )
 {

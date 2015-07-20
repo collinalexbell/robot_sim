@@ -28,6 +28,7 @@ class Neuron{
     public:
         Neuron* output_at(int);
         void stimulate(Neuron*);
+        void stimulate_step();
         void self_stimulate(double stim){
             stimulation += stim;
         }
@@ -40,6 +41,7 @@ class Neuron{
         double stimulation;
         double output_strength;
         double threshold;
+        double stim_decay;
 
     public:
         double get_stimulation(){return stimulation;}
@@ -47,10 +49,17 @@ class Neuron{
             stimulation = 0;
             threshold = 1;
             output_strength = 1;
+            stim_decay = 0;
         }
         Neuron(double threshold):threshold(threshold){
             stimulation = 0;
             output_strength = 1;
+        }
+        void set_decay(double decay){
+            stim_decay = decay;
+        }
+        double get_decay(){
+            return stim_decay;
         }
 
         void step();

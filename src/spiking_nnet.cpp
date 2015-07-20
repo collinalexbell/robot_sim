@@ -57,7 +57,7 @@ void Neuron::recieve_stimulation(Neuron* n, double stimulation_strength){
 
 void Neuron::step(){
    handle_stimulation_step(); 
-   //stimulate_step();
+   stimulate_step();
     
 }
 
@@ -77,6 +77,16 @@ void Neuron::handle_stimulation_step(){
         incoming_stimuli.pop_front();
         //Taken care of
     }
+}
+
+void Neuron::stimulate_step(){
+    if( stimulation >= threshold ){
+        stimulation = 0;
+        for( auto it = outputs.begin(); it != outputs.end(); it++ ){
+            stimulate(*it);
+        }
+    }
+    stimulation *= (1 - stim_decay);
 }
 
 Neuron* Spiking_NNet::add_neuron(){

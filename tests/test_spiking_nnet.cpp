@@ -116,7 +116,6 @@ TEST_CASE("Input neurons can stimulate outpute neurons"){
     REQUIRE(output->get_stimulation() == .55);
 }
 
-
 TEST_CASE("Neurons will stimulate other neurons in their step"){
     Neuron *input = new Neuron(.6);
     Neuron *output = new Neuron();
@@ -126,7 +125,7 @@ TEST_CASE("Neurons will stimulate other neurons in their step"){
     input->self_stimulate(.2); 
     //Self stimulation happens instantly
     //This is what will be used for inputing data into the system
-    REQUIRE(input->get_stimulation() == .2)
+    REQUIRE(input->get_stimulation() == .2);
 
     input->step();
     output->step();
@@ -147,9 +146,35 @@ TEST_CASE("Neurons will stimulate other neurons in their step"){
     output->step();
 
     REQUIRE(output->get_stimulation() == .2);
+
+    Neuron *input2 = new Neuron(.4);
+
+    Neuron::connect(input2, output, .5, 1);
+
+    input2->self_stimulate(.4);
+    input->self_stimulate(.7);
+
+    for( int i=0; i<2; i++ ){
+        input->step();
+        input2->step();
+        output->step();
+    }
+
+    REQUIRE(output->get_stimulation() == .9);
+
+
 }
 
+TEST_CASE("Neuron stim will decay"){
+    Neuron *n = new Neuron(.6);
 
+    n->set_decay(.5);
+
+    n->self_stimulate(.4);
+    n->step();
+
+    REQUIRE(n->get_stimulation() == .2);
+}
 
 
 

@@ -55,6 +55,12 @@ class Neuron{
             stimulation = 0;
             output_strength = 1;
         }
+        Neuron(double thresh, double decay){
+            threshold = thresh;
+            stim_decay = decay;
+            stimulation = 0;
+            output_strength = 1;
+        }
         void set_decay(double decay){
             stim_decay = decay;
         }
@@ -67,10 +73,13 @@ class Neuron{
 
 class Spiking_NNet{
     public:
+        Neuron* add_neuron(std::string, double thresh, double decay);
+        Neuron* add_neuron(double thresh, double decay);
         Neuron* add_neuron(std::string);
         Neuron* add_neuron();
         Neuron* get_neuron(std::string);
         std::vector<Neuron*> get_neurons();
+        void step();
     private:
         std::vector<Neuron*> neurons;
         std::unordered_map<std::string, Neuron*> named_neurons;

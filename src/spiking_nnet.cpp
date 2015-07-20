@@ -103,6 +103,20 @@ Neuron* Spiking_NNet::add_neuron(std::string name){
     return rv;
 }
 
+Neuron* Spiking_NNet::add_neuron(std::string name, double thresh, double decay){
+    Neuron *rv = add_neuron(thresh, decay);
+    std::pair<std::string, Neuron*> insert_me;
+    insert_me = std::make_pair(name, rv);
+    named_neurons.insert(insert_me);
+    return rv;
+}
+
+Neuron* Spiking_NNet::add_neuron(double thresh, double decay){
+    Neuron* rv = new Neuron(thresh, decay);
+    neurons.push_back(rv);
+    return rv;
+}
+
 Neuron* Spiking_NNet::get_neuron(std::string name){
     try{
         return named_neurons.at(name);
@@ -115,5 +129,11 @@ Neuron* Spiking_NNet::get_neuron(std::string name){
 
 std::vector<Neuron*> Spiking_NNet::get_neurons(){
     return neurons;
+}
+
+void Spiking_NNet::step(){
+    for( auto it=neurons.begin(); it != neurons.end(); it++ ){
+        (*it)->step();
+    }
 }
 

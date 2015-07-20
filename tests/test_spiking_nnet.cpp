@@ -176,6 +176,35 @@ TEST_CASE("Neuron stim will decay"){
     REQUIRE(n->get_stimulation() == .2);
 }
 
+TEST_CASE("Build and step net"){
+    Spiking_NNet *nnet = new Spiking_NNet();
+
+    //Lets build a semi complex net
+    Neuron *in1, *in2, *in3, *out1, *out2;
+    //Test first version of add_neuron
+    in1 = nnet->add_neuron("in1", .4, .5);
+    in2 = nnet->add_neuron("in2", .2, .5);
+    //Test second version
+    in3 = nnet->add_neuron(.5, .2);
+    //Test third version
+    out1 = nnet->add_neuron("out1");
+    //Test 4th version
+    out2 = nnet->add_neuron();
+
+    //Step all neurons
+    nnet->step();
+}
+
+TEST_CASE("Serialize net"){
+}
+
+TEST_CASE("Load Serialized Net"){
+}
+
+TEST_CASE("Mutate Serialized Net"){
+}
+
+
 
 
 

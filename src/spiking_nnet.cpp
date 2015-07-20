@@ -2,9 +2,10 @@
 #include <vector>
 #include <stdexcept>
 #include <unordered_map>
+#include <iostream>
 
 
-void Neuron::connect(Neuron *from, Neuron *to, double weight, double speed){
+void Neuron::connect(Neuron *from, Neuron *to, double weight, int speed){
     //Notify from of to
     from->outputs.push_back(to);
 
@@ -15,7 +16,7 @@ void Neuron::connect(Neuron *from, Neuron *to, double weight, double speed){
     to->weights.insert(weight_pair);
 
     //Speed
-    std::pair<Neuron*, double> speed_pair;
+    std::pair<Neuron*, int> speed_pair;
     speed_pair = std::make_pair(from, speed);
     to->speeds.insert(speed_pair);
 }
@@ -24,12 +25,58 @@ double Neuron::weight_for(Neuron *input){
     return weights.at(input);
 }
 
-double Neuron::speed_for(Neuron *input){
+int Neuron::speed_for(Neuron *input){
     return speeds.at(input);
 }
 
 Neuron* Neuron::output_at(int position){
     return outputs.at(position);
+}
+
+void Neuron::stimulate(Neuron* n){
+    n->recieve_stimulation(this, output_strength);
+}
+
+void Neuron::recieve_stimulation(Neuron* n, double stimulation_strength){
+    double incoming = weight_for(n) * stimulation_strength;
+    double speed = speed_for(n);
+
+    while(incoming_stimuli.size() < speed){
+        incoming_stimuli.push_back(new std::vector<double>());
+    }
+    if(incoming_stimuli.size() == speed){
+        //This will fire if there is no deque entry for this step
+        std::vector<double>* insert_me = new std::vector<double>();
+        insert_me->push_back(incoming);
+        incoming_stimuli.push_back(insert_me);
+    }
+    else{
+        incoming_stimuli[speed]->push_back(incoming);
+    }
+}
+
+void Neuron::step(){
+   handle_stimulation_step(); 
+   //stimulate_step();
+    
+}
+
+void Neuron::handle_stimulation_step(){
+    int i;
+    //Handle incoming stimulation
+    if(incoming_stimuli.size() > 0){
+        std::vector<double> *incoming = incoming_stimuli[0];
+        for( auto it = incoming->begin(); it != incoming->end(); it++){
+            //std::cout<<"Incoming: " << *it<<std::endl;
+            stimulation += *it;
+        }
+
+        delete incoming;
+        //2 pointers are pointing to this deleted vector
+        incoming = NULL;
+        incoming_stimuli.pop_front();
+        //Taken care of
+    }
 }
 
 Neuron* Spiking_NNet::add_neuron(){

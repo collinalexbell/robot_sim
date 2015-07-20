@@ -2,6 +2,7 @@
 #include "../libs/catch.hpp"
 #include <vector>
 #include "spiking_nnet.h"
+#include <iostream>
 
 
 TEST_CASE("Spiking nnet can add nuerons"){
@@ -62,22 +63,95 @@ TEST_CASE("Spiking nnet can associate names to neurons"){
 
 }
 
-TEST_CASE("Neurons can add an output"){
+TEST_CASE("Neurons be connected"){
     int i;
     Neuron *input = new Neuron();
     Neuron *out1 = new Neuron();
     Neuron *out2 = new Neuron();
 
-    Neuron::connect(input, out1, .2, .3);
-    Neuron::connect(input, out2, .4, .5);
+    Neuron::connect(input, out1, .2, 1);
+    Neuron::connect(input, out2, .4, 2);
 
     REQUIRE(input->output_at(0) == out1);
     REQUIRE(input->output_at(1) == out2);
     REQUIRE(out1->weight_for(input) == .2);
-    REQUIRE(out1->speed_for(input) == .3);
     REQUIRE(out2->weight_for(input) == .4);
-    REQUIRE(out2->speed_for(input) == .5);
+    REQUIRE(out1->speed_for(input) == 1);
+    REQUIRE(out2->speed_for(input) == 2);
 }
+
+TEST_CASE("Input neurons can stimulate outpute neurons"){
+    Neuron *input1 = new Neuron();
+    Neuron *input2 = new Neuron();
+    Neuron *input3 = new Neuron();
+
+    Neuron *output = new Neuron();
+
+    Neuron::connect(input1, output, .2, 1);
+    Neuron::connect(input2, output, .3, 2);
+    Neuron::connect(input3, output, .05, 4);
+
+    input1->stimulate(output);
+    input2->stimulate(output);
+    input3->stimulate(output);
+
+    //std::cout << "First step" << std::endl;
+    output->step();
+    REQUIRE(output->get_stimulation() == 0);
+
+    //std::cout << "Second step" << std::endl;
+    output->step();
+    REQUIRE(output->get_stimulation() == .2);
+
+    //std::cout << "Third step" << std::endl;
+    output->step();
+    REQUIRE(output->get_stimulation() == .5);
+
+    //std::cout << "Fourth step" << std::endl;
+    output->step();
+    REQUIRE(output->get_stimulation() == .5);
+
+    //std::cout << "Fith step" << std::endl;
+    output->step();
+    REQUIRE(output->get_stimulation() == .55);
+}
+
+
+TEST_CASE("Neurons will stimulate other neurons in their step"){
+    Neuron *input = new Neuron(.6);
+    Neuron *output = new Neuron();
+
+    Neuron::connect(input, output, .2, 1);
+
+    input->self_stimulate(.2); 
+    //Self stimulation happens instantly
+    //This is what will be used for inputing data into the system
+    REQUIRE(input->get_stimulation() == .2)
+
+    input->step();
+    output->step();
+    REQUIRE(output->get_stimulation() == 0);
+
+    input->self_stimulate(.4);
+    
+    //This will cause input to stimulate output
+    input->step();
+
+    //But output will not respond on this step since time = 1
+    output->step();
+    
+    REQUIRE(input->get_stimulation() == 0);
+    REQUIRE(output->get_stimulation() == 0);
+
+    input->step();
+    output->step();
+
+    REQUIRE(output->get_stimulation() == .2);
+}
+
+
+
+
 
 
 int main( int argc, char* argv[] )

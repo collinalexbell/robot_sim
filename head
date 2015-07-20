@@ -1,0 +1,4 @@
+clang++ -std=c++11 -stdlib=libc++ -c -g -I include/simulator src/spiking_nnet.cpp
+clang++ -o bin/test_spiking_nnet tests/test_spiking_nnet.cpp spiking_nnet.o -I include/simulator -std=c++11 -stdlib=libc++  -v
+gdb bin/test_spiking_nnet
+make: *** No rule to make target `5'.  Stop.

@@ -4,20 +4,22 @@
 #include <vector>
 #include <unordered_map>
 #include <string>
+#include <deque>
 
 
 class Neuron{
     //Static methods
     public:
-        static void connect(Neuron*, Neuron*, double, double);
+        static void connect(Neuron*, Neuron*, double, int);
     
     //For neurons that are recieving stimuli
     private:
         std::unordered_map<Neuron*, double> weights;
-        std::unordered_map<Neuron*, double> speeds;
+        std::unordered_map<Neuron*, int> speeds;
     public:
         double weight_for(Neuron*);
-        double speed_for(Neuron*);
+        int speed_for(Neuron*);
+        void recieve_stimulation(Neuron*, double);
    
     //For neurons that are sending stimuli
     private:
@@ -25,16 +27,33 @@ class Neuron{
 
     public:
         Neuron* output_at(int);
+        void stimulate(Neuron*);
+        void self_stimulate(double stim){
+            stimulation += stim;
+        }
 
 
     //Methods for all types
     private:
+        void handle_stimulation_step();
+        std::deque< std::vector<double>* > incoming_stimuli;
         double stimulation;
+        double output_strength;
+        double threshold;
 
     public:
+        double get_stimulation(){return stimulation;}
         Neuron(){
             stimulation = 0;
+            threshold = 1;
+            output_strength = 1;
         }
+        Neuron(double threshold):threshold(threshold){
+            stimulation = 0;
+            output_strength = 1;
+        }
+
+        void step();
 };
 
 class Spiking_NNet{

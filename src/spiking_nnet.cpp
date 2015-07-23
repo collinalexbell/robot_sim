@@ -1,8 +1,13 @@
-#include "spiking_nnet.h"
 #include <vector>
 #include <stdexcept>
 #include <unordered_map>
 #include <iostream>
+#include <stdlib.h>
+#include <stdio.h>
+#include <time.h>
+#include "spiking_nnet.h"
+#include "../libs/json.hpp"
+
 
 
 void Neuron::connect(Neuron *from, Neuron *to, double weight, int speed){
@@ -98,16 +103,22 @@ Neuron* Spiking_NNet::add_neuron(){
 Neuron* Spiking_NNet::add_neuron(std::string name){
     Neuron* rv = add_neuron(); 
     std::pair<std::string, Neuron*> insert_me;
+    std::pair<Neuron*, std::string> insert_me_inverse;
     insert_me = std::make_pair(name, rv);
+    insert_me_inverse = std::make_pair(rv, name);
     named_neurons.insert(insert_me);
+    neurons_to_name.insert(insert_me_inverse);
     return rv;
 }
 
 Neuron* Spiking_NNet::add_neuron(std::string name, double thresh, double decay){
     Neuron *rv = add_neuron(thresh, decay);
     std::pair<std::string, Neuron*> insert_me;
+    std::pair<Neuron*, std::string> insert_me_inverse;
     insert_me = std::make_pair(name, rv);
+    insert_me_inverse = std::make_pair(rv, name);
     named_neurons.insert(insert_me);
+    neurons_to_name.insert(insert_me_inverse);
     return rv;
 }
 
@@ -137,3 +148,136 @@ void Spiking_NNet::step(){
     }
 }
 
+Spiking_NNet::Spiking_NNet(){
+}
+
+Spiking_NNet::Spiking_NNet(std::string json_text){
+
+    using json = nlohmann::json;
+    double rnd_buffer;
+    std::vector<json> connections;
+    std::string to_str;
+    std::string name;
+    double decay, threshold, weight;
+    int to_int, speed;
+    Neuron *out_n;
+
+    /* initialize random seed: */
+    srand (time(NULL));
+
+    json net_data = json::parse(json_text);
+    json json_neurons = net_data["neurons"];
+
+    //Create a neuron for each representation
+    for( auto it = json_neurons.begin(); it != json_neurons.end(); it++ ){
+        //Handle decay
+        if( (*it)["decay"].is_string() ){
+            //Special assignment
+            if( (*it)["decay"].get<std::string>() == "random" ){
+                rnd_buffer = rand()/double(RAND_MAX);
+                decay = rnd_buffer;
+            }
+        }
+        else{
+            //Assume it is a value
+            decay = (*it)["decay"].get<double>();
+        }
+
+        //Handle threshold
+        if( (*it)["threshold"].is_string() ){
+            //Special assignment
+            if( (*it)["threshold"].get<std::string>() == "random" ){
+                rnd_buffer = rand()/double(RAND_MAX);
+                threshold = rnd_buffer;
+            }
+        }
+        else{
+            //Assume it is a value
+            decay = (*it)["threshold"].get<double>();
+        }
+
+
+        //Check for name and add neuron
+        if ( it->count("name") == 1){
+            name = (*it)["name"].get<std::string>();
+            add_neuron(name, threshold, decay);
+        }
+        else{
+            add_neuron(threshold, decay);
+        }
+    }
+
+
+    //Wire up connections
+    int index = 0;
+    for( auto it = json_neurons.begin(); it != json_neurons.end(); it++ ){
+
+        //Because neurons were added to net in order, 
+        //the index of a json_neuron and net neuron is the same
+        //therefore..
+        in_n = neurons[index];
+
+
+        connections =  (*it)["connections"].get<std::vector<json> >();
+        for ( auto con_it=connections.begin(); con_it != connections.end(); con_it++ ){
+            if( (*con_it)["to"].is_string() ){
+                std::string to_str = (*con_it)["to"].get<std::string>();
+                out_n = get_neuron(to_str);
+
+
+            }
+            else{
+                to_int = (*con_it)["to"].get<int>();
+                //std::cout << "    connects to: " << to_int << std::endl;
+                out_n = neurons.at(to_int);
+            }
+            
+            //GET json weight;
+            if( (*con_it)['weight'].is_string() ){
+                weight = rand()/double(RAND_MAX);
+            }
+            else{
+                //Assume its a double
+                weight = (*con_it)['weight'];
+            }
+
+
+            //GET json speed
+            if( (*con_it)['speed'].is_string() ){
+                speed = rand()%3 + 1;
+            }
+            else{
+                //Assume its a double
+                speed = (*con_it)['speed'];
+            }
+
+
+
+        }
+        Neuron::connect(in_n, out_n, weight, speed)
+        index++;
+    }
+
+    //Check that neurons got created
+    for( int i=0; i<neurons.size(); i++ ){
+        printf("Neuron #: %d", i);
+        if( neurons_to_name.count(neurons[i]) > 0 ){
+            printf(", name: %s\n", neurons_to_name.at(neurons[i]).c_str());
+        }
+        printf("    threshold: %f\n", neurons[i]->get_threshold());
+        printf("    decay: %f\n", neurons[i]->get_decay());
+        vector<Neuron*> outputs = neurons[i]->get_outputs;
+        for ( int j=0; j<outputs.size(); j++ ){
+            //////STOPPING HERE
+            //Need to get key
+            //printf("Neuron: %d", outputs[j]);
+
+        }
+        printf("\n\n");
+    }
+
+}
+
+std::string Spiking_NNet::serialize(){
+    return "To be implemented";
+}

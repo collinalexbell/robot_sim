@@ -68,7 +68,7 @@ unsigned int Sim::start_gui_test_bool(char test_text[], bool desired_result){
     yes_no_offset->x = 0;
 
     SDL_Color textColor = { 255, 255, 255 };
-    font = TTF_OpenFont( "opensans.ttf", 14 );
+    font = TTF_OpenFont( "resources/opensans.ttf", 14 );
     message = TTF_RenderText_Solid( font, test_text, textColor );
     std::cout << SDL_GetError();
     message2 = TTF_RenderText_Solid( font, "Press Y/N", textColor );

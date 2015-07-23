@@ -1,9 +1,26 @@
 #define CATCH_CONFIG_RUNNER
 #include "../libs/catch.hpp"
-#include <vector>
 #include "spiking_nnet.h"
+#include <fstream>
 #include <iostream>
+#include <vector>
 
+/*
+template<typename Func>
+void gui_test(Sim* sim, char text[], bool result, Func func =[](){}){
+    unsigned int test_id = sim->start_gui_test_bool(text, result);
+    bool gui_test_result = false;
+
+    while(sim->step()){
+        if(sim->gui_test_finished(test_id)){
+            gui_test_result = sim->get_gui_test_result(test_id);
+            break;
+        }
+        func();
+    }
+    REQUIRE( gui_test_result == result);
+}
+*/
 
 TEST_CASE("Spiking nnet can add nuerons"){
     int i, j;
@@ -195,10 +212,23 @@ TEST_CASE("Build and step net"){
     nnet->step();
 }
 
-TEST_CASE("Serialize net"){
-}
+TEST_CASE("Load Serialized Net and the reserialize"){
 
-TEST_CASE("Load Serialized Net"){
+    std::ifstream t("resources/prototype_spikingnn.json");
+    std::string json_text((std::istreambuf_iterator<char>(t)),
+                             std::istreambuf_iterator<char>());
+
+    std::cout << "JSON: " <<  json_text << std::endl;
+
+    Spiking_NNet *nnet = new Spiking_NNet(json_text);
+
+    std::cout << nnet->serialize() << std::endl;
+
+    std::cout << "Does this net look correct? (y/n)" << std::endl;
+
+    char answer[4];
+    std::cin >> answer;
+    REQUIRE(answer == "y");
 }
 
 TEST_CASE("Mutate Serialized Net"){

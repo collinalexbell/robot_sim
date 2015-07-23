@@ -32,6 +32,9 @@ class Neuron{
         void self_stimulate(double stim){
             stimulation += stim;
         }
+        std::vector<Neuron*> get_outputs{
+            return outputs;
+        }
 
 
     //Methods for all types
@@ -68,21 +71,32 @@ class Neuron{
             return stim_decay;
         }
 
+        double get_threshold(){
+            return threshold;
+        }
+
         void step();
 };
 
 class Spiking_NNet{
     public:
+        Spiking_NNet();
+
+        //This loads a json file to create a net
+        Spiking_NNet(std::string);
+
         Neuron* add_neuron(std::string, double thresh, double decay);
         Neuron* add_neuron(double thresh, double decay);
         Neuron* add_neuron(std::string);
         Neuron* add_neuron();
         Neuron* get_neuron(std::string);
         std::vector<Neuron*> get_neurons();
+        std::string serialize();
         void step();
     private:
         std::vector<Neuron*> neurons;
         std::unordered_map<std::string, Neuron*> named_neurons;
+        std::unordered_map<Neuron*, std::string> neurons_to_name;
 };
 
 #endif

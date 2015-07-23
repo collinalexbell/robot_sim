@@ -1,0 +1,341 @@
+
+{
+    "neurons": [
+        {
+            "name": "clock",
+            "connections": [
+                {
+                    "to": "tail_motor",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "left_turn",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "right_turn",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": 8,
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": 9,
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": 10,
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": 11,
+                    "weight": "random",
+                    "speed": "random"
+                }
+            ],
+            "threshold": "random",
+            "decay": "random"
+        },
+        {
+            "name": "tail_motor",
+            "connections": [],
+            "threshold": "random",
+            "decay": "random"
+        },
+        {
+            "name": "left_turn",
+            "connections": [],
+            "threshold": "random",
+            "decay": "random"
+        },
+        {
+            "name": "right_turn",
+            "connections": [],
+            "threshold": "random",
+            "decay": "random"
+        },
+        {
+            "name": "left_customer",
+            "connections": [
+                {
+                    "to": "left_sensor_hidden",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "customers_hidden",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "tail_motor",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "left_turn",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "right_turn",
+                    "weight": "random",
+                    "speed": "random"
+                }
+            ],
+            "threshold": "random",
+            "decay": "random"
+        },
+        {
+            "name": "right_customer",
+            "connections": [
+                {
+                    "to": "right_sensor_hidden",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "customers_hidden",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "tail_motor",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "left_turn",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "right_turn",
+                    "weight": "random",
+                    "speed": "random"
+                }
+            ],
+            "threshold": "random",
+            "decay": "random"
+        },
+        {
+            "name": "left_garden",
+            "connections": [
+                {
+                    "to": "left_sensor_hidden",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "gardens_hidden",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "tail_motor",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "left_turn",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "right_turn",
+                    "weight": "random",
+                    "speed": "random"
+                }
+            ],
+            "threshold": "random",
+            "decay": "random"
+        },
+        {
+            "name": "right_garden",
+            "connections": [
+                {
+                    "to": "left_sensor_hidden",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "gardens_hidden",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "tail_motor",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "left_turn",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "right_turn",
+                    "weight": "random",
+                    "speed": "random"
+                }
+            ],
+            "threshold": "random",
+            "decay": "random"
+        },
+        {
+            "name": "left_sensor_hidden",
+            "connections": [
+                {
+                    "to": "tail_motor",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "left_turn",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "right_turn",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "right_sensor_hidden",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "customers_hidden",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "gardens_hidden",
+                    "weight": "random",
+                    "speed": "random"
+                }
+            ],
+            "threshold": "random",
+            "decay": "random"
+        },
+        {
+            "name": "right_sensor_hidden",
+            "connections": [
+                {
+                    "to": "tail_motor",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "left_turn",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "right_turn",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "left_sensor_hidden",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "customers_hidden",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "gardens_hidden",
+                    "weight": "random",
+                    "speed": "random"
+                }
+            ],
+            "threshold": "random",
+            "decay": "random"
+        },
+        {
+            "name": "customers_hidden",
+            "connections": [
+                {
+                    "to": "tail_motor",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "left_turn",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "right_turn",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "left_sensor_hidden",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "right_sensor_hidden",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "gardens_hidden",
+                    "weight": "random",
+                    "speed": "random"
+                }
+            ],
+            "threshold": "random",
+            "decay": "random"
+        },
+        {
+            "name": "gardens_hidden",
+            "connections": [
+                {
+                    "to": "tail_motor",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "left_turn",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "right_turn",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "left_sensor_hidden",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "right_sensor_hidden",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "customer_hidden",
+                    "weight": "random",
+                    "speed": "random"
+                }
+            ],
+            "threshold": "random",
+            "decay": "random"
+        }
+    ]
+}

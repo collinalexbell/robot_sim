@@ -32,7 +32,7 @@ class Neuron{
         void self_stimulate(double stim){
             stimulation += stim;
         }
-        std::vector<Neuron*> get_outputs{
+        std::vector<Neuron*> get_outputs(){
             return outputs;
         }
 

@@ -226,9 +226,10 @@ TEST_CASE("Load Serialized Net and the reserialize"){
 
     std::cout << "Does this net look correct? (y/n)" << std::endl;
 
-    char answer[4];
+    char *answer;
+    char key[] = "y";
     std::cin >> answer;
-    REQUIRE(answer == "y");
+    REQUIRE(strcmp(answer, key) == 0);
 }
 
 TEST_CASE("Mutate Serialized Net"){

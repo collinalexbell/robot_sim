@@ -133,7 +133,9 @@ Neuron* Spiking_NNet::get_neuron(std::string name){
         return named_neurons.at(name);
     }
     catch(...){
-        throw std::invalid_argument("Named neuron does not exist");
+        char buffer[50];
+        sprintf(buffer, "Neuron: %s does not exist", name.c_str());
+        throw std::invalid_argument(buffer);
     }
 }
 
@@ -160,7 +162,7 @@ Spiking_NNet::Spiking_NNet(std::string json_text){
     std::string name;
     double decay, threshold, weight;
     int to_int, speed;
-    Neuron *out_n;
+    Neuron *out_n, *in_n;
 
     /* initialize random seed: */
     srand (time(NULL));
@@ -233,32 +235,34 @@ Spiking_NNet::Spiking_NNet(std::string json_text){
             }
             
             //GET json weight;
-            if( (*con_it)['weight'].is_string() ){
+            if( (*con_it)["weight"].is_string() ){
                 weight = rand()/double(RAND_MAX);
             }
             else{
                 //Assume its a double
-                weight = (*con_it)['weight'];
+                weight = (*con_it)["weight"];
+
             }
 
 
             //GET json speed
-            if( (*con_it)['speed'].is_string() ){
+            if( (*con_it)["speed"].is_string() ){
                 speed = rand()%3 + 1;
             }
             else{
                 //Assume its a double
-                speed = (*con_it)['speed'];
+                speed = (*con_it)["speed"];
             }
 
 
-
+            Neuron::connect(in_n, out_n, weight, speed);
         }
-        Neuron::connect(in_n, out_n, weight, speed)
         index++;
     }
 
+
     //Check that neurons got created
+    std::string output_identifier;
     for( int i=0; i<neurons.size(); i++ ){
         printf("Neuron #: %d", i);
         if( neurons_to_name.count(neurons[i]) > 0 ){
@@ -266,18 +270,95 @@ Spiking_NNet::Spiking_NNet(std::string json_text){
         }
         printf("    threshold: %f\n", neurons[i]->get_threshold());
         printf("    decay: %f\n", neurons[i]->get_decay());
-        vector<Neuron*> outputs = neurons[i]->get_outputs;
-        for ( int j=0; j<outputs.size(); j++ ){
-            //////STOPPING HERE
-            //Need to get key
-            //printf("Neuron: %d", outputs[j]);
+        printf("    num_of_outputs: %d\n", neurons[i]->get_outputs().size());
 
+        //OUTPUTS
+        std::vector<Neuron*> outputs = neurons[i]->get_outputs();
+        printf("    outputs:[\n");
+        for ( int j=0; j<outputs.size(); j++ ){
+            if( neurons_to_name.count(outputs[j]) > 0 ){
+                output_identifier = neurons_to_name.at(outputs[j]);
+            }else{
+                //Get the index of neuron in vector neurons
+                int pos = find(neurons.begin(), neurons.end(), outputs[j]) - neurons.begin();
+                if(pos >= neurons.size()) {
+                    //Out of bounds
+                    output_identifier = "undefined";
+                }else{
+                    output_identifier = std::to_string(pos);
+                }
+            }
+            printf("        {\n");
+            printf("            'identifier':%s\n", output_identifier.c_str());
+
+            //Get the weight and speed
+            printf("            'weight': %f\n", outputs[j]->weight_for(neurons[i]));
+            printf("            'speed': %d\n", outputs[j]->speed_for(neurons[i]));
+            printf("        }\n");
         }
+        printf("    ]\n");
         printf("\n\n");
     }
 
 }
 
 std::string Spiking_NNet::serialize(){
-    return "To be implemented";
+    using json = nlohmann::json;
+    json j; 
+    std::string rv;
+    j["neurons"] = json::array();
+    for( auto it = neurons.begin(); it != neurons.end(); it++ ){
+        json neuron; 
+
+        //Name
+        if( neurons_to_name.count((*it)) > 0 ){
+            neuron["name"] = neurons_to_name[(*it)];
+        }
+
+        //Connections
+        neuron["connections"] = json::array();
+
+        std::vector<Neuron *> outputs = (*it)->get_outputs();
+        for( int i=0; i<outputs.size(); i++ ){
+            json connection;
+
+            //Get connection name or id
+            if( neurons_to_name.count(outputs[i]) > 0 ){
+                connection["to"] = neurons_to_name.at(outputs[i]);
+
+            }else{
+                int pos = find(neurons.begin(), neurons.end(), outputs[j]) - neurons.begin();
+                if(pos >= neurons.size()) {
+                    //Out of bounds
+                    throw "Neuron not in net!!!";
+                }else{
+                    connection["to"] = std::to_string(pos);
+                }
+
+            }
+
+            //Get connection weight
+            connection["weight"] = outputs[i]->weight_for((*it));
+
+            //Get connection speed
+            connection["speed"] = outputs[i]->speed_for((*it));
+            
+            //Add connection to neuron
+            neuron["connections"].push_back(connection);
+        }
+
+        //Threshold
+        neuron["threshold"] = (*it)->get_threshold();
+
+        //Decay
+        neuron["decay"] = (*it)->get_decay();
+        
+
+        //Add neuron to json f
+        j["neurons"].push_back(neuron);
+    }
+
+    rv = j.dump(4);
+    return rv;
 }
+

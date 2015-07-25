@@ -329,7 +329,7 @@
                     "speed": "random"
                 },
                 {
-                    "to": "customer_hidden",
+                    "to": "customers_hidden",
                     "weight": "random",
                     "speed": "random"
                 }

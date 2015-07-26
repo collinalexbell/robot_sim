@@ -24,6 +24,8 @@ void Robot::init(){
    current_image = IMG_Load("./resources/ball_bot.png");
    angle = 0;
    nnet = NULL;
+   fruit_cap = 3;
+   money = 0;
 }
 
 void Robot::set_position(int x, int y){
@@ -156,11 +158,37 @@ void Robot::step(){
 
 }
 
+void Robot::signal_garden(Garden *garden){
+    if(last_garden != garden && num_of_fruit < fruit_cap){
+        harvest(garden);
+    }
+}
+
+void Robot::harvest(Garden *garden){
+    if(garden->harvest()){
+        num_of_fruit += 1;
+        last_garden = garden;
+    }
+}
+
+int Robot::get_fruit(){
+    return num_of_fruit;
+}
+
+void Robot::sell_a_fruit(){
+    if(num_of_fruit > 0){
+        money ++;
+        num_of_fruit--;
+    }
+}
+
 Robot::~Robot(){
     if(nnet != NULL){
         delete nnet;
     }
 }
+
+
 
 
 

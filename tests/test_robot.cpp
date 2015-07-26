@@ -239,6 +239,54 @@ TEST_CASE("Robots, have a step function that senses gardens, runs nnet, and acts
     
 }
 
+TEST_CASE("robot can handle garden and customer signal"){
+    Robot *robot;
+    Garden *garden1, *garden2;
+    robot = new Robot();
+    garden1 = new Garden();
+    garden2 = new Garden();
+
+
+    //Default garden cap is 3 for robot
+    //Default fruit gardens produce is 3;
+    
+    robot->signal_garden(garden1);
+    REQUIRE(garden1->get_remaining_fruit() == 2);
+    REQUIRE(robot->get_fruit() == 1);
+
+    //Gardens should not be able to be harvest twice
+    robot->signal_garden(garden1);
+    REQUIRE(garden1->get_remaining_fruit() == 2);
+    REQUIRE(robot->get_fruit() == 1);
+
+    //Go to another garden
+    robot->signal_garden(garden2);
+    REQUIRE(garden2->get_remaining_fruit() == 2);
+    REQUIRE(robot->get_fruit() == 2);
+
+    //Go back to original
+    robot->signal_garden(garden1);
+    REQUIRE(garden1->get_remaining_fruit() == 1);
+    REQUIRE(robot->get_fruit() == 3);
+
+    //Go to another garden. Robot cant harvest, too full
+    robot->signal_garden(garden2);
+    REQUIRE(garden2->get_remaining_fruit() == 2);
+    REQUIRE(robot->get_fruit() == 3);
+
+    robot->sell_a_fruit();
+
+    //This should work because it was blocked last time
+    robot->signal_garden(garden2);
+    REQUIRE(garden2->get_remaining_fruit() == 1);
+    REQUIRE(robot->get_fruit() == 3);
+
+
+
+
+
+}
+
 
 
 int main( int argc, char* argv[] )

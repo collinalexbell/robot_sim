@@ -9,6 +9,8 @@ Garden::Garden(){
     //Load Image
     garden_sprite = IMG_Load("./resources/blue_garden.png");
 
+    fruit_remaining = 3;
+
 
 }
 
@@ -29,4 +31,16 @@ Point Garden::get_position(){
 
 SDL_Surface* Garden::get_image(){
     return garden_sprite;
+}
+
+bool Garden::harvest(){
+    if( fruit_remaining > 0 ){
+        fruit_remaining --;
+        return true;
+    }
+    return false;
+}
+
+int Garden::get_remaining_fruit(){
+    return fruit_remaining;
 }

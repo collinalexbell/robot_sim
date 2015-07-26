@@ -17,10 +17,15 @@ class Garden: public Drawable{
 
         void set_position(int x, int y);
 
+        bool harvest();
+
+        int get_remaining_fruit();
+
     private:
         SDL_Surface* garden_sprite;
         Point position;
         bool position_exists;
+        int fruit_remaining;
 };
 
 #endif

@@ -62,6 +62,16 @@ class Robot: public Agent{
         //Common to constructors
         void init();
 
+        void signal_garden(Garden* garden);
+
+        int get_fruit();
+
+        void harvest(Garden*);
+
+        void sell_a_fruit();
+
+        int get_money();
+
 
     private:
         //Internal direction
@@ -83,7 +93,17 @@ class Robot: public Agent{
         std::unordered_map<std::string, Distance_Sensor*> distance_sensors;
 
         Spiking_NNet* nnet; 
+    
+        //Keeps track of last garden harvested so bot doesn't double harvest
+        Garden *last_garden;
+        
+        int num_of_fruit;
+        
+        //Max fruit robot can cary: Hardcoded to 3
+        int fruit_cap;
 
+        //Earned from selling fruit
+        int money;
 
 };
 

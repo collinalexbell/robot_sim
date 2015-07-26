@@ -47,6 +47,7 @@ class Neuron{
         double output_strength;
         double threshold;
         double stim_decay;
+        double output;
 
     public:
         double get_stimulation(){return stimulation;}
@@ -78,6 +79,10 @@ class Neuron{
 
         double get_threshold(){
             return threshold;
+        }
+
+        double get_output(){
+            return output;
         }
 
         void step();

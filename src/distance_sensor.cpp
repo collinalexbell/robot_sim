@@ -40,6 +40,12 @@ double Distance_Sensor::sense(std::vector<Drawable*> things_to_sense){
         y_dist = robot_y - thing_y;
         x_dist = thing_x - robot_x;
 
+        //WHY CANT I DIVIDE BY 0. DAMN YOU non naked singularities!!!
+        if( x_dist == 0 ){
+            return 1;
+        }
+
+
         thing_to_sense_angle = atan ((y_dist)/(x_dist)) * 180 / PI; 
 
         //Test if it is sensed by sensor

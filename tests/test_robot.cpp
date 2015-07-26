@@ -120,8 +120,8 @@ TEST_CASE("Robot can sense gardens"){
 
     //Robot can sense garden
 
-    garden_left = robot->sense("garden_left");
-    garden_right = robot->sense("garden_right");
+    garden_left = robot->sense("left_garden");
+    garden_right = robot->sense("right_garden");
 
     REQUIRE( garden_left == garden_right );
     REQUIRE( garden_left > 0 );
@@ -154,6 +154,89 @@ TEST_CASE("Robots, when created, initialize a new standard neural net"){
         REQUIRE(typeid(*n) == typeid(Neuron));
     }
 
+}
+
+TEST_CASE("Robots, have a step function that senses gardens, runs nnet, and acts based on the nnet"){
+    //WILL NEED TO CHANGE IF HARDCODED angle and distance variables in
+    //robot->step change
+    Robot *robot;
+    World *world;
+    Spiking_NNet *nnet;
+    Neuron *left_garden, *right_garden, *left_turn, *right_turn, *tail_motor, *clock;
+    int garden_uuid, robot_uuid;
+
+    std::ifstream t("resources/prototype_spikingnn.json");
+    std::string json_text((std::istreambuf_iterator<char>(t)),
+                             std::istreambuf_iterator<char>());
+
+
+    world = new World();
+    robot_uuid = world->add_robot(0,100, json_text);
+    world->add_garden(0, 100);
+    robot = world->get_robot(robot_uuid);
+
+    //The garden should trigger both the left_garden and right_garden sensor
+    robot->step();
+
+    int entry = 0;
+
+    nnet = robot->get_nnet();
+    left_garden = nnet->get_neuron("left_garden");
+    entry ++;
+    right_garden = nnet->get_neuron("right_garden");
+    entry ++;
+    clock = nnet->get_neuron("clock");
+    entry ++;
+
+    REQUIRE(left_garden->get_output() > 0);
+    REQUIRE(right_garden->get_output() > 0);
+    REQUIRE(clock->get_output() > 0);
+
+    
+    //Now make robot rotate left
+    
+    //Need to remove the garden and remake robot
+    //This will prevent garden stim from messing up movement
+    //Also, clock needs its threshold set to 10000000ish for same reason
+    
+    world->remove_robot(robot_uuid);
+    world->remove_garden(garden_uuid);
+
+    robot_uuid = world->add_robot(0,100, json_text);
+    world->add_garden(0, 100);
+    robot = world->get_robot(robot_uuid);
+
+    nnet = robot->get_nnet();
+    clock = nnet->get_neuron("clock");
+    //EAT THIS CLOCK!!!!!
+    clock->set_threshold(100000000000);
+
+    left_turn = nnet->get_neuron("left_turn");
+    entry ++;
+    left_turn->self_stimulate(1.1);
+
+    robot->step();
+
+    REQUIRE(robot->get_angle() == 3);
+
+    right_turn = nnet->get_neuron("right_turn");
+    entry ++;
+    right_turn->self_stimulate(1.1);
+
+    robot->step();
+
+    REQUIRE(robot->get_angle() == 0);
+
+    //Now make robot move!!
+
+    tail_motor = nnet->get_neuron("tail_motor");
+    tail_motor->self_stimulate(1.1);
+    
+    robot->step();
+
+    Point pos = robot->get_position();
+    REQUIRE(pos.x == 5);
+    
 }
 
 

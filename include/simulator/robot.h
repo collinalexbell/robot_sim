@@ -21,6 +21,7 @@ class Robot: public Agent{
         World* world;
     public:
         Robot();
+        ~Robot();
         Robot(std::string);
 
         void add_world(World* w){
@@ -55,6 +56,11 @@ class Robot: public Agent{
         double sense(std::string sensor_name);
 
         Spiking_NNet* get_nnet();
+
+        void step();
+
+        //Common to constructors
+        void init();
 
 
     private:

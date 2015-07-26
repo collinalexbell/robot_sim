@@ -98,6 +98,9 @@ void Neuron::stimulate_step(){
         for( auto it = outputs.begin(); it != outputs.end(); it++ ){
             stimulate(*it);
         }
+        output = output_strength;
+    }else{
+        output = 0;
     }
     stimulation *= (1 - stim_decay);
 }

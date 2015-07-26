@@ -11,13 +11,19 @@
 #define PI 3.14159265
 
 Robot::Robot(){
-   position_exists = false; 
-   current_image = IMG_Load("./resources/ball_bot.png");
-   angle = 0;
+    init();
 }
 
 Robot::Robot(std::string dna){
+    init();
     nnet = new Spiking_NNet(dna);
+}
+
+void Robot::init(){
+   position_exists = false; 
+   current_image = IMG_Load("./resources/ball_bot.png");
+   angle = 0;
+   nnet = NULL;
 }
 
 void Robot::set_position(int x, int y){
@@ -108,6 +114,52 @@ double Robot::sense(std::string sensor_name){
 
 Spiking_NNet* Robot::get_nnet(){
     return nnet;
+}
+
+void Robot::step(){
+    Neuron *left_garden, *right_garden, *clock, *left_turn, *right_turn, *tail_motor;
+
+    //Handle inputs
+    left_garden = nnet->get_neuron("left_garden");
+    right_garden = nnet->get_neuron("right_garden");
+    clock = nnet->get_neuron("clock");
+    
+    left_garden->self_stimulate(sense("left_garden"));
+    right_garden->self_stimulate(sense("right_garden"));
+    //Always fire the clock
+    clock->self_stimulate(100000);
+
+    //Crank the nnet(I wrote a test for this. I hope it works :) )
+    nnet->step();
+
+    //Handle outputs
+    left_turn = nnet->get_neuron("left_turn"); 
+    right_turn = nnet->get_neuron("right_turn");
+    tail_motor = nnet->get_neuron("tail_motor");
+
+    //Turns will cancel each other out
+    if(left_turn->get_output() > 0 && right_turn->get_output() == 0){
+        printf("angle current: %d\n", angle);
+        printf("Turning left\n");
+        rotate(3);
+        printf("angle after rotate: %d\n", angle);
+    }
+    
+    if(right_turn->get_output() > 0 && left_turn->get_output() == 0){
+        printf("Turning right");
+        rotate(-3);
+    }
+
+    if(tail_motor->get_output() > 0){
+        move(5);
+    }
+
+}
+
+Robot::~Robot(){
+    if(nnet != NULL){
+        delete nnet;
+    }
 }
 
 

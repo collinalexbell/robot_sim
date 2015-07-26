@@ -7,6 +7,8 @@
 #include <stdlib.h>
 #include <iostream>
 #include <vector>
+#include <unordered_map>
+#include <algorithm>
 
 #define MAX_ID 65535
 
@@ -21,10 +23,25 @@ unsigned int World::add_robot(int x, int y){
     Robot* r = new Robot();
     r->add_world(this);
     r->set_position(x,y);
-    r->add_distance_sensor("garden_left", 20, 60);
-    r->add_distance_sensor("garden_right", -20, 60);
-    r->add_distance_sensor("customer_left", 20, 60);
-    r->add_distance_sensor("customer_right", -20, 60);
+    r->add_distance_sensor("left_garden", 20, 60);
+    r->add_distance_sensor("right_garden", -20, 60);
+    r->add_distance_sensor("left_customer", 20, 60);
+    r->add_distance_sensor("right_customer", -20, 60);
+    std::pair<unsigned int, Robot*> insert_me (uuid, r);
+    robots.insert(insert_me);
+
+    return uuid;
+}
+
+unsigned int World::add_robot(int x, int y, std::string json_text){
+    unsigned int uuid = rand() % MAX_ID;
+    Robot* r = new Robot(json_text);
+    r->add_world(this);
+    r->set_position(x,y);
+    r->add_distance_sensor("left_garden", 20, 60);
+    r->add_distance_sensor("right_garden", -20, 60);
+    r->add_distance_sensor("left_customer", 20, 60);
+    r->add_distance_sensor("right_customer", -20, 60);
     std::pair<unsigned int, Robot*> insert_me (uuid, r);
     robots.insert(insert_me);
 
@@ -40,6 +57,32 @@ unsigned int World::add_garden(int x, int y){
     garden_vec.push_back(g);
 
     return uuid;
+}
+
+void World::remove_robot(unsigned int uuid){
+    try{
+        Robot* robot = robots.at(uuid);
+        delete robot;
+        robots.erase(uuid);
+    }
+    catch(...){
+        printf("Failed to get robot at uuid: %d", uuid);
+    }
+}
+
+void World::remove_garden(unsigned int uuid){
+    try{
+        Garden* garden = gardens.at(uuid);
+        auto it = find(garden_vec.begin(), garden_vec.end(), garden);
+        gardens.erase(uuid);
+        garden_vec.erase(it);
+        delete garden;
+    }
+    catch(...){
+        printf("Failed to get robot at uuid: %d", uuid);
+    }
+
+
 }
 
 Robot* World::get_robot(unsigned int id){

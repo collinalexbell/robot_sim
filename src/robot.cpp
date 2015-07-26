@@ -4,6 +4,7 @@
 #include "robot.h"
 #include "point.h"
 #include "modulo.h"
+#include "world.h"
 #include <iostream>
 #include <math.h>
 
@@ -71,3 +72,36 @@ void Robot::move(int distance){
     position.y += delta_y;
 
 }
+
+void Robot::add_distance_sensor(std::string name, double angle, double width){
+    Distance_Sensor * sensor;     
+
+    sensor = new Distance_Sensor(this, angle, width);
+    std::pair<std::string, Distance_Sensor*> insert_me (name, sensor);
+
+    distance_sensors.insert(insert_me);
+}
+
+double Robot::sense(std::string sensor_name){
+    Distance_Sensor *sensor;
+    try{
+        sensor = distance_sensors.at(sensor_name);
+    }
+    catch(...){
+        throw "Sensor must exist for a robot to sense with it";
+    }
+    
+    try{
+        std::vector<Garden*> gardens = world->get_gardens();
+        std::vector<Drawable*> drawables(gardens.begin(), gardens.end());
+        return sensor->sense(drawables);
+    }
+    catch(...){
+       throw "Robot can ony sense if it is in a world of objects";
+    }
+
+}
+
+
+
+

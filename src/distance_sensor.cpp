@@ -1,5 +1,5 @@
-#include "distance_sensor.h"
 #include "robot.h"
+#include "distance_sensor.h"
 #include "drawable.h"
 #include "modulo.h"
 #include <vector>
@@ -9,7 +9,7 @@
 #define WORLD_Y 720
 #define PI 3.14159265
 
-Distance_Sensor::Distance_Sensor(Robot *r, double center_ang, double sensor_w){
+Distance_Sensor::Distance_Sensor(Agent *r, double center_ang, double sensor_w){
     owner = r;
     center_angle = center_ang;
     sensor_width = sensor_w;

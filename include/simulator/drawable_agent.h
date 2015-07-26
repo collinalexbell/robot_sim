@@ -1,0 +1,2 @@
+#ifndef DRAWABLE_AGENT_H
+#define DRAWABLE_AGENT_H

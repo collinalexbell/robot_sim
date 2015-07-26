@@ -1,16 +1,29 @@
 #ifndef ROBOT_H
 #define ROBOT_H
 
+class World;
+
 #include <SDL/SDL.h>
 #include "point.h"
 #include "drawable.h"
+#include "agent.h"
+#include "world.h"
+#include "distance_sensor.h"
 #include <vector>
+#include <unordered_map>
+#include <string>
 
 using namespace std;
 
-class Robot: public Drawable{
+class Robot: public Agent{
+    private:
+        World* world;
     public:
         Robot();
+
+        void add_world(World* w){
+            world = w;
+        }
 
         //Used when initializing robot
         void set_position(int x, int y);
@@ -35,6 +48,10 @@ class Robot: public Drawable{
         //NOTE: x, y components will be rounded
         void move(int);
 
+        void add_distance_sensor(std::string name, double angle, double width);
+
+        double sense(std::string sensor_name);
+
 
     private:
         //Internal direction
@@ -51,6 +68,11 @@ class Robot: public Drawable{
 
         //Obvious. Is set on movements and rotates
         SDL_Surface* current_image;
+
+        //Used to store garden and  customer sensors
+        std::unordered_map<std::string, Distance_Sensor*> distance_sensors;
+
+        //Used for sensing objects in the environment
         
 
 

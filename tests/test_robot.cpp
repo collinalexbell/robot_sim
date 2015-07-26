@@ -103,12 +103,12 @@ TEST_CASE("Robot can move at various speeds"){
     });
 }
 
-/* WE need to write the add eye function first!!
 TEST_CASE("Robot can sense gardens"){
     Robot* robot;
     Garden* garden;
     double garden_left, garden_right;
     World *world = new World();
+    int robot_uuid, garden_uuid;
 
     robot_uuid = world->add_robot(0, 50);
     garden_uuid = world->add_garden(1000, 50);
@@ -118,14 +118,13 @@ TEST_CASE("Robot can sense gardens"){
 
     //Robot can sense garden
 
-    garden_left = robot->sense_garden("left");
-    garden_right = robot->sense_garden("right");
+    garden_left = robot->sense("garden_left");
+    garden_right = robot->sense("garden_right");
 
     REQUIRE( garden_left == garden_right );
     REQUIRE( garden_left > 0 );
 
 }
-*/
 
 
 

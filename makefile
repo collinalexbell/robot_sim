@@ -15,7 +15,7 @@ main.o: $(SRC)/main.cpp
 sim.o: $(SRC)/sim.cpp $(SIM_LIB)/sim.h $(SIM_LIB)/drawable.h
 	$(CLANG) $(SRC)/sim.cpp 
 
-robot.o: $(SRC)/robot.cpp $(SIM_LIB)/robot.h $(SIM_LIB)/point.h $(SIM_LIB)/drawable.h $(SIM_LIB)/modulo.h
+robot.o: $(SRC)/robot.cpp $(SIM_LIB)/robot.h $(SIM_LIB)/point.h $(SIM_LIB)/drawable.h $(SIM_LIB)/modulo.h $(SIM_LIB)/distance_sensor.h $(SIM_LIB)/agent.h $(SIM_LIB)/world.h
 	$(CLANG) $(SRC)/robot.cpp
 
 garden.o: $(SRC)/garden.cpp $(SIM_LIB)/garden.h $(SIM_LIB)/point.h $(SIM_LIB)/drawable.h
@@ -27,9 +27,10 @@ world.o: $(SRC)/world.cpp $(SIM_LIB)/world.h $(SIM_LIB)/robot.h $(SIM_LIB)/garde
 spiking_nnet.o: $(SRC)/spiking_nnet.cpp $(SIM_LIB)/spiking_nnet.h
 	$(CLANG) $(SRC)/spiking_nnet.cpp
 
-distance_sensor.o: $(SRC)/distance_sensor.cpp $(SIM_LIB)/distance_sensor.h $(SIM_LIB)/robot.h $(SIM_LIB)/modulo.h $(SIM_LIB)/drawable.h
+distance_sensor.o: $(SRC)/distance_sensor.cpp $(SIM_LIB)/distance_sensor.h $(SIM_LIB)/modulo.h $(SIM_LIB)/drawable.h $(SIM_LIB)/agent.h
 	$(CLANG) $(SRC)/distance_sensor.cpp
 
+agent.h: drawable.h
 
 drawable.h: point.h
 
@@ -40,15 +41,16 @@ point.h:
 test_sim: sim.o test_sim.o
 	$(LINK) -o $(BIN)/test_sim sim.o test_sim.o
 
-test_robot: robot.o sim.o
-	$(LINK) -o $(BIN)/test_robot robot.o $(TEST)/test_robot.cpp sim.o
+test_robot: robot.o sim.o world.o distance_sensor.o garden.o
+	$(LINK) -o $(BIN)/test_robot robot.o world.o distance_sensor.o garden.o $(TEST)/test_robot.cpp sim.o
+	gdb bin/test_robot
 
 test_garden: garden.o
 	$(LINK) -o $(BIN)/test_garden garden.o $(TEST)/test_garden.cpp
 	gdb bin/test_garden
 
-test_world: robot.o world.o sim.o garden.o
-	$(LINK) -o $(BIN)/test_world world.o robot.o sim.o garden.o $(TEST)/test_world.cpp
+test_world: robot.o world.o sim.o garden.o distance_sensor.o
+	$(LINK) -o $(BIN)/test_world world.o robot.o sim.o garden.o distance_sensor.o $(TEST)/test_world.cpp
 	gdb bin/test_world
 
 test_spiking_nnet: spiking_nnet.o sim.o
@@ -58,7 +60,6 @@ test_spiking_nnet: spiking_nnet.o sim.o
 test_distance_sensor: distance_sensor.o robot.o garden.o
 	$(LINK) -o $(BIN)/test_distance_sensor $(TEST)/test_distance_sensor.cpp distance_sensor.o  robot.o garden.o
 	gdb bin/test_distance_sensor
-
 
 clean:
 	rm *.o

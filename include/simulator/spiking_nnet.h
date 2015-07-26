@@ -20,6 +20,8 @@ class Neuron{
         double weight_for(Neuron*);
         int speed_for(Neuron*);
         void recieve_stimulation(Neuron*, double);
+        void set_speed_for(Neuron*, double);
+        void set_weight_for(Neuron*, double);
    
     //For neurons that are sending stimuli
     private:
@@ -67,6 +69,9 @@ class Neuron{
         void set_decay(double decay){
             stim_decay = decay;
         }
+        void set_threshold(double t){
+            threshold = t;
+        }
         double get_decay(){
             return stim_decay;
         }
@@ -84,6 +89,8 @@ class Spiking_NNet{
 
         //This loads a json file to create a net
         Spiking_NNet(std::string);
+
+        void mutate(double rate, double max_amount);
 
         Neuron* add_neuron(std::string, double thresh, double decay);
         Neuron* add_neuron(double thresh, double decay);

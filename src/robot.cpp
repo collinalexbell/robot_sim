@@ -16,7 +16,6 @@ inline int modulo(int a, int b) {
 Robot::Robot(){
    position_exists = false; 
    current_image = IMG_Load("./resources/ball_bot.png");
-   std::cout << SDL_GetError() << std::endl;
    angle = 0;
 }
 

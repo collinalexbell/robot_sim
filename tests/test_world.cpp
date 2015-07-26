@@ -42,6 +42,19 @@ TEST_CASE( "world can add and draw robots" ){
 
 }
 
+TEST_CASE( "world can add and draw gardens" ){
+    Sim* sim = new Sim(1080, 760);
+    sim->init();
+
+    World* world = new World();
+    world->add_garden(100,100);
+
+    sim->add_drawable(world);
+
+    gui_test(sim, "Garden is drawn", true);
+
+}
+
 
 int main( int argc, char* argv[] )
 {

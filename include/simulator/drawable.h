@@ -2,6 +2,7 @@
 #define DRAWABLE_H
 
 #include "point.h"
+#include <SDL/SDL.h>
 
 class Drawable{
     public:

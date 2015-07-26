@@ -84,6 +84,14 @@ void Neuron::handle_stimulation_step(){
     }
 }
 
+void Neuron::set_speed_for(Neuron* n, double speed){
+    speeds[n] = speed;
+}
+
+void Neuron::set_weight_for(Neuron* n, double weight){
+    weights[n] = weight;
+}
+
 void Neuron::stimulate_step(){
     if( stimulation >= threshold ){
         stimulation = 0;
@@ -195,7 +203,7 @@ Spiking_NNet::Spiking_NNet(std::string json_text){
         }
         else{
             //Assume it is a value
-            decay = (*it)["threshold"].get<double>();
+            threshold = (*it)["threshold"].get<double>();
         }
 
 
@@ -361,4 +369,92 @@ std::string Spiking_NNet::serialize(){
     rv = j.dump(4);
     return rv;
 }
+
+
+void Spiking_NNet::mutate(double rate, double max_amount){
+    //Things to change: Threshold, Decay, Weight, Speed
+    srand (time(NULL));
+
+    int num_of_mutations = 0, j;
+    std::vector<std::string> things_to_mutate; 
+    things_to_mutate = {"threshold", "decay"};
+    double new_threshold, new_decay, weight, speed, amount;
+    Neuron* out;
+    std::vector<Neuron*> outputs;
+
+    for( int i=0; i<neurons.size(); i++ ){
+        for( int j=0; j<things_to_mutate.size(); j++ ){
+            if( rand()/double(RAND_MAX) < rate ){
+                //Get the direction to mutate
+                int is_positive = rand()%2;
+
+                //Get the amount to mutate
+                if(is_positive == 1){
+                     amount = (rand()/double(RAND_MAX)) * max_amount;
+                }else{
+                     amount = -1 * (rand()/double(RAND_MAX)) * max_amount;
+                }
+
+                //Mutate the indexed thing to mutate
+                if( things_to_mutate[j] == "threshold"){
+                    new_threshold = neurons[i]->get_threshold() + amount;
+                    neurons[i]->set_threshold(new_threshold);
+
+                }
+
+                if( things_to_mutate[j] == "decay"){
+                    new_decay = neurons[i]->get_decay() + amount;
+                    neurons[i]->set_decay(new_decay);
+                }
+            }
+        }
+        outputs = neurons[i]->get_outputs();
+        for( j=0; j<outputs.size(); j++ ){
+
+            if( rand()/double(RAND_MAX) < rate ){
+                int is_positive = rand()%2;
+
+                //Get the amount to mutate
+                if(is_positive == 1){
+                    double amount = (rand()/double(RAND_MAX)) * max_amount;
+                }else{
+                    double amount = -1 * (rand()/double(RAND_MAX)) * max_amount;
+                }
+
+                //weight
+                out = neurons[i]->output_at(j);
+                weight = out->weight_for(neurons[i]);
+                weight += amount;
+                out->set_weight_for(neurons[i], weight);
+
+            }
+            if( rand()/double(RAND_MAX) < rate ){
+                int is_positive = rand()%2;
+
+                //Get the amount to mutate
+                if(is_positive == 1){
+                    double amount = (rand()/double(RAND_MAX)) * max_amount;
+                }else{
+                    double amount = -1 * (rand()/double(RAND_MAX)) * max_amount;
+                }
+
+                //speed
+                out = neurons[i]->output_at(j);
+                speed = out->speed_for(neurons[i]);
+                if(is_positive){
+                    speed += 1;
+                }
+                else{
+                    speed -= 1;
+                }
+                out->set_speed_for(neurons[i], speed);
+
+            }
+        }
+    }
+}
+
+
+
+
 

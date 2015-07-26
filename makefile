@@ -18,7 +18,10 @@ sim.o: $(SRC)/sim.cpp $(SIM_LIB)/sim.h $(SIM_LIB)/drawable.h
 robot.o: $(SRC)/robot.cpp $(SIM_LIB)/robot.h $(SIM_LIB)/point.h $(SIM_LIB)/drawable.h
 	$(CLANG) $(SRC)/robot.cpp
 
-world.o: $(SRC)/world.cpp $(SIM_LIB)/world.h $(SIM_LIB)/robot.h $(SIM_LIB)/point.h $(SIM_LIB)/drawable.h
+garden.o: $(SRC)/garden.cpp $(SIM_LIB)/garden.h $(SIM_LIB)/point.h $(SIM_LIB)/drawable.h
+	$(CLANG) $(SRC)/garden.cpp
+
+world.o: $(SRC)/world.cpp $(SIM_LIB)/world.h $(SIM_LIB)/robot.h $(SIM_LIB)/garden.h $(SIM_LIB)/point.h $(SIM_LIB)/drawable.h
 	$(CLANG) $(SRC)/world.cpp
 
 spiking_nnet.o: $(SRC)/spiking_nnet.cpp $(SIM_LIB)/spiking_nnet.h
@@ -36,8 +39,13 @@ test_sim: sim.o test_sim.o
 test_robot: robot.o sim.o
 	$(LINK) -o $(BIN)/test_robot robot.o $(TEST)/test_robot.cpp sim.o
 
-test_world: robot.o world.o sim.o
-	$(LINK) -o $(BIN)/test_world world.o robot.o sim.o $(TEST)/test_world.cpp
+test_garden: garden.o
+	$(LINK) -o $(BIN)/test_garden garden.o $(TEST)/test_garden.cpp
+	gdb bin/test_garden
+
+test_world: robot.o world.o sim.o garden.o
+	$(LINK) -o $(BIN)/test_world world.o robot.o sim.o garden.o $(TEST)/test_world.cpp
+	gdb bin/test_world
 
 test_spiking_nnet: spiking_nnet.o sim.o
 	$(LINK) -o $(BIN)/test_spiking_nnet $(TEST)/test_spiking_nnet.cpp spiking_nnet.o sim.o 	

@@ -230,9 +230,40 @@ TEST_CASE("Load Serialized Net and the reserialize"){
     char key[] = "y";
     std::cin >> answer;
     REQUIRE(strcmp(answer, key) == 0);
+
+    std::string serialized = nnet->serialize();
+
+    delete nnet;
+    nnet = new Spiking_NNet(serialized);
+    std::string new_serialized = nnet->serialize();
+
+    REQUIRE(serialized == new_serialized);
 }
 
 TEST_CASE("Mutate Serialized Net"){
+
+    std::ifstream t("resources/prototype_spikingnn.json");
+    std::string json_text((std::istreambuf_iterator<char>(t)),
+                             std::istreambuf_iterator<char>());
+
+    std::cout << "JSON: " <<  json_text << std::endl;
+
+    Spiking_NNet *nnet = new Spiking_NNet(json_text);
+
+    printf("Original NNET:\n\n%s\n", nnet->serialize().c_str());
+
+    //Mutate( ratio of mutations, amount of shift if mutation)
+    nnet->mutate(.5, .1);
+
+    printf("Mutated NNET:\n\n%s\n" , nnet->serialize().c_str());
+    printf("Does this mutated net look conrrect? Y/N");
+
+    std::string answer;
+    std::string key = "y";
+    std::cin >> answer;
+    REQUIRE(answer == key);
+
+
 }
 
 

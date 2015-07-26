@@ -1,5 +1,6 @@
 #include "world.h"
 #include "robot.h"
+#include "garden.h"
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
 #include <stdlib.h>
@@ -23,6 +24,16 @@ unsigned int World::add_robot(int x, int y){
     return uuid;
 }
 
+unsigned int World::add_garden(int x, int y){
+    unsigned int uuid = rand() % MAX_ID;
+    Garden* g = new Garden();
+    g->set_position(x,y);
+    std::pair<unsigned int, Garden*> insert_me (uuid, g);
+    gardens.insert(insert_me);
+
+    return uuid;
+}
+
 SDL_Surface* World::get_image(){
     SDL_Rect* offset = new SDL_Rect();
 
@@ -31,6 +42,16 @@ SDL_Surface* World::get_image(){
     
     //Blit robots
     for ( auto it = robots.begin(); it != robots.end(); ++it ){
+        Point point = it->second->get_position();
+
+        offset->x = point.x;
+        offset->y = point.y;
+
+        SDL_BlitSurface(it->second->get_image(), NULL, world_surf, offset);
+    }
+
+    //Blit robots
+    for ( auto it = gardens.begin(); it != gardens.end(); ++it ){
         Point point = it->second->get_position();
 
         offset->x = point.x;

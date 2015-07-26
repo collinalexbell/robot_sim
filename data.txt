@@ -1,0 +1,1054 @@
+JSON: 
+{
+    "neurons": [
+        {
+            "name": "clock",
+            "connections": [
+                {
+                    "to": "tail_motor",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "left_turn",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "right_turn",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": 8,
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": 9,
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": 10,
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": 11,
+                    "weight": "random",
+                    "speed": "random"
+                }
+            ],
+            "threshold": "random",
+            "decay": "random"
+        },
+        {
+            "name": "tail_motor",
+            "connections": [],
+            "threshold": "random",
+            "decay": "random"
+        },
+        {
+            "name": "left_turn",
+            "connections": [],
+            "threshold": "random",
+            "decay": "random"
+        },
+        {
+            "name": "right_turn",
+            "connections": [],
+            "threshold": "random",
+            "decay": "random"
+        },
+        {
+            "name": "left_customer",
+            "connections": [
+                {
+                    "to": "left_sensor_hidden",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "customers_hidden",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "tail_motor",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "left_turn",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "right_turn",
+                    "weight": "random",
+                    "speed": "random"
+                }
+            ],
+            "threshold": "random",
+            "decay": "random"
+        },
+        {
+            "name": "right_customer",
+            "connections": [
+                {
+                    "to": "right_sensor_hidden",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "customers_hidden",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "tail_motor",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "left_turn",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "right_turn",
+                    "weight": "random",
+                    "speed": "random"
+                }
+            ],
+            "threshold": "random",
+            "decay": "random"
+        },
+        {
+            "name": "left_garden",
+            "connections": [
+                {
+                    "to": "left_sensor_hidden",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "gardens_hidden",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "tail_motor",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "left_turn",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "right_turn",
+                    "weight": "random",
+                    "speed": "random"
+                }
+            ],
+            "threshold": "random",
+            "decay": "random"
+        },
+        {
+            "name": "right_garden",
+            "connections": [
+                {
+                    "to": "left_sensor_hidden",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "gardens_hidden",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "tail_motor",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "left_turn",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "right_turn",
+                    "weight": "random",
+                    "speed": "random"
+                }
+            ],
+            "threshold": "random",
+            "decay": "random"
+        },
+        {
+            "name": "left_sensor_hidden",
+            "connections": [
+                {
+                    "to": "tail_motor",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "left_turn",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "right_turn",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "right_sensor_hidden",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "customers_hidden",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "gardens_hidden",
+                    "weight": "random",
+                    "speed": "random"
+                }
+            ],
+            "threshold": "random",
+            "decay": "random"
+        },
+        {
+            "name": "right_sensor_hidden",
+            "connections": [
+                {
+                    "to": "tail_motor",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "left_turn",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "right_turn",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "left_sensor_hidden",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "customers_hidden",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "gardens_hidden",
+                    "weight": "random",
+                    "speed": "random"
+                }
+            ],
+            "threshold": "random",
+            "decay": "random"
+        },
+        {
+            "name": "customers_hidden",
+            "connections": [
+                {
+                    "to": "tail_motor",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "left_turn",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "right_turn",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "left_sensor_hidden",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "right_sensor_hidden",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "gardens_hidden",
+                    "weight": "random",
+                    "speed": "random"
+                }
+            ],
+            "threshold": "random",
+            "decay": "random"
+        },
+        {
+            "name": "gardens_hidden",
+            "connections": [
+                {
+                    "to": "tail_motor",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "left_turn",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "right_turn",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "left_sensor_hidden",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "right_sensor_hidden",
+                    "weight": "random",
+                    "speed": "random"
+                },
+                {
+                    "to": "customers_hidden",
+                    "weight": "random",
+                    "speed": "random"
+                }
+            ],
+            "threshold": "random",
+            "decay": "random"
+        }
+    ]
+}
+
+Neuron #: 0, name: clock
+    threshold: 0.350809
+    decay: 0.877691
+    num_of_outputs: 7
+    outputs:[
+        {
+            'identifier':tail_motor
+            'weight': 0.456772
+            'speed': 2
+        }
+        {
+            'identifier':left_turn
+            'weight': 0.655088
+            'speed': 1
+        }
+        {
+            'identifier':right_turn
+            'weight': 0.710154
+            'speed': 3
+        }
+        {
+            'identifier':left_sensor_hidden
+            'weight': 0.559986
+            'speed': 2
+        }
+        {
+            'identifier':right_sensor_hidden
+            'weight': 0.545763
+            'speed': 1
+        }
+        {
+            'identifier':customers_hidden
+            'weight': 0.193881
+            'speed': 3
+        }
+        {
+            'identifier':gardens_hidden
+            'weight': 0.903626
+            'speed': 3
+        }
+    ]
+
+
+Neuron #: 1, name: tail_motor
+    threshold: 0.697625
+    decay: 0.040322
+    num_of_outputs: 0
+    outputs:[
+    ]
+
+
+Neuron #: 2, name: left_turn
+    threshold: 0.416040
+    decay: 0.984258
+    num_of_outputs: 0
+    outputs:[
+    ]
+
+
+Neuron #: 3, name: right_turn
+    threshold: 0.130384
+    decay: 0.379909
+    num_of_outputs: 0
+    outputs:[
+    ]
+
+
+Neuron #: 4, name: left_customer
+    threshold: 0.319194
+    decay: 0.366949
+    num_of_outputs: 5
+    outputs:[
+        {
+            'identifier':left_sensor_hidden
+            'weight': 0.953039
+            'speed': 2
+        }
+        {
+            'identifier':customers_hidden
+            'weight': 0.812228
+            'speed': 1
+        }
+        {
+            'identifier':tail_motor
+            'weight': 0.175861
+            'speed': 3
+        }
+        {
+            'identifier':left_turn
+            'weight': 0.834881
+            'speed': 1
+        }
+        {
+            'identifier':right_turn
+            'weight': 0.779986
+            'speed': 1
+        }
+    ]
+
+
+Neuron #: 5, name: right_customer
+    threshold: 0.314639
+    decay: 0.687827
+    num_of_outputs: 5
+    outputs:[
+        {
+            'identifier':right_sensor_hidden
+            'weight': 0.939418
+            'speed': 1
+        }
+        {
+            'identifier':customers_hidden
+            'weight': 0.907657
+            'speed': 3
+        }
+        {
+            'identifier':tail_motor
+            'weight': 0.090469
+            'speed': 2
+        }
+        {
+            'identifier':left_turn
+            'weight': 0.003822
+            'speed': 2
+        }
+        {
+            'identifier':right_turn
+            'weight': 0.730332
+            'speed': 3
+        }
+    ]
+
+
+Neuron #: 6, name: left_garden
+    threshold: 0.138615
+    decay: 0.131442
+    num_of_outputs: 5
+    outputs:[
+        {
+            'identifier':left_sensor_hidden
+            'weight': 0.399803
+            'speed': 3
+        }
+        {
+            'identifier':gardens_hidden
+            'weight': 0.865991
+            'speed': 1
+        }
+        {
+            'identifier':tail_motor
+            'weight': 0.390033
+            'speed': 3
+        }
+        {
+            'identifier':left_turn
+            'weight': 0.070403
+            'speed': 2
+        }
+        {
+            'identifier':right_turn
+            'weight': 0.214046
+            'speed': 1
+        }
+    ]
+
+
+Neuron #: 7, name: right_garden
+    threshold: 0.428359
+    decay: 0.699317
+    num_of_outputs: 5
+    outputs:[
+        {
+            'identifier':left_sensor_hidden
+            'weight': 0.177993
+            'speed': 1
+        }
+        {
+            'identifier':gardens_hidden
+            'weight': 0.090512
+            'speed': 3
+        }
+        {
+            'identifier':tail_motor
+            'weight': 0.429937
+            'speed': 3
+        }
+        {
+            'identifier':left_turn
+            'weight': 0.852796
+            'speed': 2
+        }
+        {
+            'identifier':right_turn
+            'weight': 0.736069
+            'speed': 3
+        }
+    ]
+
+
+Neuron #: 8, name: left_sensor_hidden
+    threshold: 0.073657
+    decay: 0.432503
+    num_of_outputs: 6
+    outputs:[
+        {
+            'identifier':tail_motor
+            'weight': 0.555802
+            'speed': 1
+        }
+        {
+            'identifier':left_turn
+            'weight': 0.931804
+            'speed': 2
+        }
+        {
+            'identifier':right_turn
+            'weight': 0.235211
+            'speed': 2
+        }
+        {
+            'identifier':right_sensor_hidden
+            'weight': 0.072899
+            'speed': 1
+        }
+        {
+            'identifier':customers_hidden
+            'weight': 0.470393
+            'speed': 1
+        }
+        {
+            'identifier':gardens_hidden
+            'weight': 0.827082
+            'speed': 3
+        }
+    ]
+
+
+Neuron #: 9, name: right_sensor_hidden
+    threshold: 0.885230
+    decay: 0.959296
+    num_of_outputs: 6
+    outputs:[
+        {
+            'identifier':tail_motor
+            'weight': 0.018498
+            'speed': 2
+        }
+        {
+            'identifier':left_turn
+            'weight': 0.704370
+            'speed': 2
+        }
+        {
+            'identifier':right_turn
+            'weight': 0.198933
+            'speed': 2
+        }
+        {
+            'identifier':left_sensor_hidden
+            'weight': 0.256675
+            'speed': 1
+        }
+        {
+            'identifier':customers_hidden
+            'weight': 0.018928
+            'speed': 1
+        }
+        {
+            'identifier':gardens_hidden
+            'weight': 0.966397
+            'speed': 1
+        }
+    ]
+
+
+Neuron #: 10, name: customers_hidden
+    threshold: 0.311685
+    decay: 0.053270
+    num_of_outputs: 6
+    outputs:[
+        {
+            'identifier':tail_motor
+            'weight': 0.178403
+            'speed': 3
+        }
+        {
+            'identifier':left_turn
+            'weight': 0.972394
+            'speed': 2
+        }
+        {
+            'identifier':right_turn
+            'weight': 0.392909
+            'speed': 1
+        }
+        {
+            'identifier':left_sensor_hidden
+            'weight': 0.283339
+            'speed': 1
+        }
+        {
+            'identifier':right_sensor_hidden
+            'weight': 0.585199
+            'speed': 1
+        }
+        {
+            'identifier':gardens_hidden
+            'weight': 0.617183
+            'speed': 3
+        }
+    ]
+
+
+Neuron #: 11, name: gardens_hidden
+    threshold: 0.233739
+    decay: 0.489572
+    num_of_outputs: 6
+    outputs:[
+        {
+            'identifier':tail_motor
+            'weight': 0.706657
+            'speed': 2
+        }
+        {
+            'identifier':left_turn
+            'weight': 0.641401
+            'speed': 1
+        }
+        {
+            'identifier':right_turn
+            'weight': 0.575896
+            'speed': 3
+        }
+        {
+            'identifier':left_sensor_hidden
+            'weight': 0.328395
+            'speed': 3
+        }
+        {
+            'identifier':right_sensor_hidden
+            'weight': 0.767857
+            'speed': 1
+        }
+        {
+            'identifier':customers_hidden
+            'weight': 0.642718
+            'speed': 1
+        }
+    ]
+
+
+{
+    "neurons": [
+        {
+            "connections": [
+                {
+                    "speed": 2,
+                    "to": "tail_motor",
+                    "weight": 0.456771894570799
+                },
+                {
+                    "speed": 1,
+                    "to": "left_turn",
+                    "weight": 0.655088335580699
+                },
+                {
+                    "speed": 3,
+                    "to": "right_turn",
+                    "weight": 0.710153594943766
+                },
+                {
+                    "speed": 2,
+                    "to": "left_sensor_hidden",
+                    "weight": 0.559985524769866
+                },
+                {
+                    "speed": 1,
+                    "to": "right_sensor_hidden",
+                    "weight": 0.545763477471547
+                },
+                {
+                    "speed": 3,
+                    "to": "customers_hidden",
+                    "weight": 0.193881117363405
+                },
+                {
+                    "speed": 3,
+                    "to": "gardens_hidden",
+                    "weight": 0.90362605168653
+                }
+            ],
+            "decay": 0.87769089121264,
+            "name": "clock",
+            "threshold": 0.350808610837352
+        },
+        {
+            "connections": [],
+            "decay": 0.0403223433719586,
+            "name": "tail_motor",
+            "threshold": 0.697625052508724
+        },
+        {
+            "connections": [],
+            "decay": 0.984257514115543,
+            "name": "left_turn",
+            "threshold": 0.416039739929158
+        },
+        {
+            "connections": [],
+            "decay": 0.379908989360514,
+            "name": "right_turn",
+            "threshold": 0.130384182152517
+        },
+        {
+            "connections": [
+                {
+                    "speed": 2,
+                    "to": "left_sensor_hidden",
+                    "weight": 0.953039438907541
+                },
+                {
+                    "speed": 1,
+                    "to": "customers_hidden",
+                    "weight": 0.812227952672275
+                },
+                {
+                    "speed": 3,
+                    "to": "tail_motor",
+                    "weight": 0.175861028570617
+                },
+                {
+                    "speed": 1,
+                    "to": "left_turn",
+                    "weight": 0.834881178492159
+                },
+                {
+                    "speed": 1,
+                    "to": "right_turn",
+                    "weight": 0.779986114604392
+                }
+            ],
+            "decay": 0.366949437356996,
+            "name": "left_customer",
+            "threshold": 0.319193659033251
+        },
+        {
+            "connections": [
+                {
+                    "speed": 1,
+                    "to": "right_sensor_hidden",
+                    "weight": 0.939418206894499
+                },
+                {
+                    "speed": 3,
+                    "to": "customers_hidden",
+                    "weight": 0.907657219519679
+                },
+                {
+                    "speed": 2,
+                    "to": "tail_motor",
+                    "weight": 0.0904690060254508
+                },
+                {
+                    "speed": 2,
+                    "to": "left_turn",
+                    "weight": 0.00382170733242375
+                },
+                {
+                    "speed": 3,
+                    "to": "right_turn",
+                    "weight": 0.730331525080992
+                }
+            ],
+            "decay": 0.687827371846804,
+            "name": "right_customer",
+            "threshold": 0.314638629236556
+        },
+        {
+            "connections": [
+                {
+                    "speed": 3,
+                    "to": "left_sensor_hidden",
+                    "weight": 0.399802872165946
+                },
+                {
+                    "speed": 1,
+                    "to": "gardens_hidden",
+                    "weight": 0.865990699206475
+                },
+                {
+                    "speed": 3,
+                    "to": "tail_motor",
+                    "weight": 0.390033004521408
+                },
+                {
+                    "speed": 2,
+                    "to": "left_turn",
+                    "weight": 0.070402753106506
+                },
+                {
+                    "speed": 1,
+                    "to": "right_turn",
+                    "weight": 0.214045794780387
+                }
+            ],
+            "decay": 0.131441578795873,
+            "name": "left_garden",
+            "threshold": 0.138614822243627
+        },
+        {
+            "connections": [
+                {
+                    "speed": 1,
+                    "to": "left_sensor_hidden",
+                    "weight": 0.177992844571356
+                },
+                {
+                    "speed": 3,
+                    "to": "gardens_hidden",
+                    "weight": 0.0905121192757562
+                },
+                {
+                    "speed": 3,
+                    "to": "tail_motor",
+                    "weight": 0.429936942378961
+                },
+                {
+                    "speed": 2,
+                    "to": "left_turn",
+                    "weight": 0.852795657633243
+                },
+                {
+                    "speed": 3,
+                    "to": "right_turn",
+                    "weight": 0.736069058410855
+                }
+            ],
+            "decay": 0.699317448632474,
+            "name": "right_garden",
+            "threshold": 0.428359165987167
+        },
+        {
+            "connections": [
+                {
+                    "speed": 1,
+                    "to": "tail_motor",
+                    "weight": 0.555801952516568
+                },
+                {
+                    "speed": 2,
+                    "to": "left_turn",
+                    "weight": 0.931803686046881
+                },
+                {
+                    "speed": 2,
+                    "to": "right_turn",
+                    "weight": 0.23521066467986
+                },
+                {
+                    "speed": 1,
+                    "to": "right_sensor_hidden",
+                    "weight": 0.0728989797983779
+                },
+                {
+                    "speed": 1,
+                    "to": "customers_hidden",
+                    "weight": 0.470392780597505
+                },
+                {
+                    "speed": 3,
+                    "to": "gardens_hidden",
+                    "weight": 0.827082478360777
+                }
+            ],
+            "decay": 0.43250274631777,
+            "name": "left_sensor_hidden",
+            "threshold": 0.0736573627561598
+        },
+        {
+            "connections": [
+                {
+                    "speed": 2,
+                    "to": "tail_motor",
+                    "weight": 0.0184975983661123
+                },
+                {
+                    "speed": 2,
+                    "to": "left_turn",
+                    "weight": 0.704369554158472
+                },
+                {
+                    "speed": 2,
+                    "to": "right_turn",
+                    "weight": 0.198933433833967
+                },
+                {
+                    "speed": 1,
+                    "to": "left_sensor_hidden",
+                    "weight": 0.256674768057035
+                },
+                {
+                    "speed": 1,
+                    "to": "customers_hidden",
+                    "weight": 0.0189281255094931
+                },
+                {
+                    "speed": 1,
+                    "to": "gardens_hidden",
+                    "weight": 0.96639731850773
+                }
+            ],
+            "decay": 0.95929584277761,
+            "name": "right_sensor_hidden",
+            "threshold": 0.885229563287101
+        },
+        {
+            "connections": [
+                {
+                    "speed": 3,
+                    "to": "tail_motor",
+                    "weight": 0.178403258872406
+                },
+                {
+                    "speed": 2,
+                    "to": "left_turn",
+                    "weight": 0.972394403988679
+                },
+                {
+                    "speed": 1,
+                    "to": "right_turn",
+                    "weight": 0.39290872979579
+                },
+                {
+                    "speed": 1,
+                    "to": "left_sensor_hidden",
+                    "weight": 0.283339410686558
+                },
+                {
+                    "speed": 1,
+                    "to": "right_sensor_hidden",
+                    "weight": 0.585198686265013
+                },
+                {
+                    "speed": 3,
+                    "to": "gardens_hidden",
+                    "weight": 0.617182568468704
+                }
+            ],
+            "decay": 0.053270166298966,
+            "name": "customers_hidden",
+            "threshold": 0.311684986721578
+        },
+        {
+            "connections": [
+                {
+                    "speed": 2,
+                    "to": "tail_motor",
+                    "weight": 0.706656754345939
+                },
+                {
+                    "speed": 1,
+                    "to": "left_turn",
+                    "weight": 0.641400927045104
+                },
+                {
+                    "speed": 3,
+                    "to": "right_turn",
+                    "weight": 0.575896472006988
+                },
+                {
+                    "speed": 3,
+                    "to": "left_sensor_hidden",
+                    "weight": 0.328395465076154
+                },
+                {
+                    "speed": 1,
+                    "to": "right_sensor_hidden",
+                    "weight": 0.767857362408125
+                },
+                {
+                    "speed": 1,
+                    "to": "customers_hidden",
+                    "weight": 0.642718220428898
+                }
+            ],
+            "decay": 0.489571829554425,
+            "name": "gardens_hidden",
+            "threshold": 0.233739321228927
+        }
+    ]
+}
+Does this net look correct? (y/n)
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+test_spiking_nnet is a Catch v1.2.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+Load Serialized Net and the reserialize
+-------------------------------------------------------------------------------
+tests/test_spiking_nnet.cpp:215
+...............................................................................
+
+tests/test_spiking_nnet.cpp:232: FAILED:
+  REQUIRE( strcmp(answer, key) == 0 )
+with expansion:
+  -5 == 0
+
+===============================================================================
+test cases:   9 |   8 passed | 1 failed
+assertions: 133 | 132 passed | 1 failed
+

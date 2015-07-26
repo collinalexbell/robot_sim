@@ -34,6 +34,14 @@ unsigned int World::add_garden(int x, int y){
     return uuid;
 }
 
+Robot* get_robot(unsigned int id){
+    return robots.at(id);
+}
+
+Garden* get_garden(unsigned int id){
+    return gardens.at(id);
+}
+
 SDL_Surface* World::get_image(){
     SDL_Rect* offset = new SDL_Rect();
 

@@ -3,15 +3,11 @@
 #include <SDL/SDL_rotozoom.h>
 #include "robot.h"
 #include "point.h"
+#include "modulo.h"
 #include <iostream>
 #include <math.h>
 
 #define PI 3.14159265
-
-inline int modulo(int a, int b) {
-      const int result = a % b;
-        return result >= 0 ? result : result + b;
-}
 
 Robot::Robot(){
    position_exists = false; 

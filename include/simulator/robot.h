@@ -27,6 +27,10 @@ class Robot: public Drawable{
         //Obvious, int is amout to rotate in deg
         void rotate(int);
 
+        int get_angle(){
+            return angle;
+        }
+
         //Obvous, int is abount to move in distance 
         //NOTE: x, y components will be rounded
         void move(int);

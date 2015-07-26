@@ -14,6 +14,9 @@ class World: public Drawable{
         World();
         unsigned int add_robot(int x, int y);
         unsigned int add_garden(int x, int y);
+        Robot* get_robot(unsigned int);
+        Garden* get_garden(unsigned int);
+
         SDL_Surface* get_image_of_robots();
         Point get_position();
         SDL_Surface* get_image();

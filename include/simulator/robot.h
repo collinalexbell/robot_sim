@@ -9,6 +9,7 @@ class World;
 #include "agent.h"
 #include "world.h"
 #include "distance_sensor.h"
+#include "spiking_nnet.h"
 #include <vector>
 #include <unordered_map>
 #include <string>
@@ -20,6 +21,7 @@ class Robot: public Agent{
         World* world;
     public:
         Robot();
+        Robot(std::string);
 
         void add_world(World* w){
             world = w;
@@ -52,6 +54,8 @@ class Robot: public Agent{
 
         double sense(std::string sensor_name);
 
+        Spiking_NNet* get_nnet();
+
 
     private:
         //Internal direction
@@ -72,8 +76,7 @@ class Robot: public Agent{
         //Used to store garden and  customer sensors
         std::unordered_map<std::string, Distance_Sensor*> distance_sensors;
 
-        //Used for sensing objects in the environment
-        
+        Spiking_NNet* nnet; 
 
 
 };

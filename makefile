@@ -15,7 +15,7 @@ main.o: $(SRC)/main.cpp
 sim.o: $(SRC)/sim.cpp $(SIM_LIB)/sim.h $(SIM_LIB)/drawable.h
 	$(CLANG) $(SRC)/sim.cpp 
 
-robot.o: $(SRC)/robot.cpp $(SIM_LIB)/robot.h $(SIM_LIB)/point.h $(SIM_LIB)/drawable.h $(SIM_LIB)/modulo.h $(SIM_LIB)/distance_sensor.h $(SIM_LIB)/agent.h $(SIM_LIB)/world.h
+robot.o: $(SRC)/robot.cpp $(SIM_LIB)/robot.h $(SIM_LIB)/point.h $(SIM_LIB)/drawable.h $(SIM_LIB)/modulo.h $(SIM_LIB)/distance_sensor.h $(SIM_LIB)/agent.h $(SIM_LIB)/world.h $(SIM_LIB)/spiking_nnet.h
 	$(CLANG) $(SRC)/robot.cpp
 
 garden.o: $(SRC)/garden.cpp $(SIM_LIB)/garden.h $(SIM_LIB)/point.h $(SIM_LIB)/drawable.h
@@ -41,8 +41,8 @@ point.h:
 test_sim: sim.o test_sim.o
 	$(LINK) -o $(BIN)/test_sim sim.o test_sim.o
 
-test_robot: robot.o sim.o world.o distance_sensor.o garden.o
-	$(LINK) -o $(BIN)/test_robot robot.o world.o distance_sensor.o garden.o $(TEST)/test_robot.cpp sim.o
+test_robot: robot.o sim.o world.o distance_sensor.o garden.o spiking_nnet.o
+	$(LINK) -o $(BIN)/test_robot robot.o world.o distance_sensor.o garden.o spiking_nnet.o $(TEST)/test_robot.cpp sim.o
 	gdb bin/test_robot
 
 test_garden: garden.o

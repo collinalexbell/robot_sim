@@ -16,6 +16,10 @@ Robot::Robot(){
    angle = 0;
 }
 
+Robot::Robot(std::string dna){
+    nnet = new Spiking_NNet(dna);
+}
+
 void Robot::set_position(int x, int y){
     position.x = x;
     position.y = y;
@@ -100,6 +104,10 @@ double Robot::sense(std::string sensor_name){
        throw "Robot can ony sense if it is in a world of objects";
     }
 
+}
+
+Spiking_NNet* Robot::get_nnet(){
+    return nnet;
 }
 
 

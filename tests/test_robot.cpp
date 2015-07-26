@@ -1,11 +1,13 @@
 #define CATCH_CONFIG_RUNNER
 #include "../libs/catch.hpp"
 #include "robot.h"
+#include "spiking_nnet.h"
 #include "world.h"
 #include "point.h"
 #include "sim.h"
 #include <SDL/SDL.h>
 #include <iostream>
+#include <fstream>
 
 template<typename Func>
 void gui_test(Sim* sim, char text[], bool result, Func func =[](){}){
@@ -126,6 +128,33 @@ TEST_CASE("Robot can sense gardens"){
 
 }
 
+TEST_CASE("Robots, when created, initialize a new standard neural net"){
+
+    std::ifstream t("resources/prototype_spikingnn.json");
+    std::string json_text((std::istreambuf_iterator<char>(t)),
+                             std::istreambuf_iterator<char>());
+
+    Robot* robot;
+    Spiking_NNet* nnet;
+    vector<std::string> neurons_needed;
+    Neuron* n;
+
+    robot = new Robot(json_text);
+    nnet = robot->get_nnet();
+    
+    neurons_needed = {"right_garden", 
+                      "left_garden", 
+                      "left_customer",
+                      "right_customer",
+                      "left_turn",
+                      "right_turn"};
+
+    for( auto it = neurons_needed.begin(); it != neurons_needed.end(); it++ ){
+        n = nnet->get_neuron((*it));
+        REQUIRE(typeid(*n) == typeid(Neuron));
+    }
+
+}
 
 
 

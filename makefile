@@ -6,7 +6,7 @@ SRC := src
 BIN := bin
 TEST := tests
 
-simulatormake: main.o sim.o world.o robot.o spiking_nnet.o distance_sensor.o garden.o
+simulatormake: sim.o world.o robot.o spiking_nnet.o distance_sensor.o garden.o
 	$(LINK) -o run sim.o world.o robot.o spiking_nnet.o distance_sensor.o garden.o $(SRC)/main.cpp
 
 

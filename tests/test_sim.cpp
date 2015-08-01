@@ -1,6 +1,6 @@
 #define CATCH_CONFIG_RUNNER
 #include "../libs/catch.hpp"
-#include "../sim.h"
+#include "sim.h"
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
 #include <iostream>
@@ -46,6 +46,16 @@ TEST_CASE( "sim add_drawable"){
     sim->add_drawable(torus);
 
     gui_test(sim, "Sim loads and draws torus", true);
+}
+
+TEST_CASE( "Sim can run a full world simulation" ){
+    Sim *sim = new Sim(1080, 780);
+    sim->init();
+
+    //Make new world with 50 robots and 3 gardens
+    sim->make_world(100, 3);
+    
+    gui_test(sim, "Sim makes a new world of 10 robots and 3 gardens and runs the sim", true);
 }
 
 

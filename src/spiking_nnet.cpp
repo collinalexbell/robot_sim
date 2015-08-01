@@ -2,8 +2,8 @@
 #include <stdexcept>
 #include <unordered_map>
 #include <iostream>
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <time.h>
 #include "spiking_nnet.h"
 #include "../libs/json.hpp"
@@ -176,7 +176,6 @@ Spiking_NNet::Spiking_NNet(std::string json_text){
     Neuron *out_n, *in_n;
 
     /* initialize random seed: */
-    srand (time(NULL));
 
     json net_data = json::parse(json_text);
     json json_neurons = net_data["neurons"];
@@ -275,17 +274,17 @@ Spiking_NNet::Spiking_NNet(std::string json_text){
     //Check that neurons got created
     std::string output_identifier;
     for( int i=0; i<neurons.size(); i++ ){
-        printf("Neuron #: %d", i);
+        //printf("Neuron #: %d", i);
         if( neurons_to_name.count(neurons[i]) > 0 ){
-            printf(", name: %s\n", neurons_to_name.at(neurons[i]).c_str());
+           // printf(", name: %s\n", neurons_to_name.at(neurons[i]).c_str());
         }
-        printf("    threshold: %f\n", neurons[i]->get_threshold());
-        printf("    decay: %f\n", neurons[i]->get_decay());
-        printf("    num_of_outputs: %d\n", neurons[i]->get_outputs().size());
+        //printf("    threshold: %f\n", neurons[i]->get_threshold());
+        //printf("    decay: %f\n", neurons[i]->get_decay());
+        //printf("    num_of_outputs: %d\n", neurons[i]->get_outputs().size());
 
         //OUTPUTS
         std::vector<Neuron*> outputs = neurons[i]->get_outputs();
-        printf("    outputs:[\n");
+        //printf("    outputs:[\n");
         for ( int j=0; j<outputs.size(); j++ ){
             if( neurons_to_name.count(outputs[j]) > 0 ){
                 output_identifier = neurons_to_name.at(outputs[j]);
@@ -299,16 +298,16 @@ Spiking_NNet::Spiking_NNet(std::string json_text){
                     output_identifier = std::to_string(pos);
                 }
             }
-            printf("        {\n");
-            printf("            'identifier':%s\n", output_identifier.c_str());
+            //printf("        {\n");
+            //printf("            'identifier':%s\n", output_identifier.c_str());
 
             //Get the weight and speed
-            printf("            'weight': %f\n", outputs[j]->weight_for(neurons[i]));
-            printf("            'speed': %d\n", outputs[j]->speed_for(neurons[i]));
-            printf("        }\n");
+           // printf("            'weight': %f\n", outputs[j]->weight_for(neurons[i]));
+            //printf("            'speed': %d\n", outputs[j]->speed_for(neurons[i]));
+            //printf("        }\n");
         }
-        printf("    ]\n");
-        printf("\n\n");
+        //printf("    ]\n");
+        //printf("\n\n");
     }
 
 }
@@ -376,7 +375,6 @@ std::string Spiking_NNet::serialize(){
 
 void Spiking_NNet::mutate(double rate, double max_amount){
     //Things to change: Threshold, Decay, Weight, Speed
-    srand (time(NULL));
 
     int num_of_mutations = 0, j;
     std::vector<std::string> things_to_mutate; 

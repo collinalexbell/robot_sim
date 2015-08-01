@@ -288,6 +288,11 @@ TEST_CASE("robot can handle garden and customer signal"){
 }
 
 
+//Test robot get score
+
+//Have child
+
+
 
 int main( int argc, char* argv[] )
 {

@@ -5,6 +5,8 @@
 #include <unordered_map>
 #include <string>
 #include <deque>
+#include <time.h>
+#include <stdlib.h>
 
 
 class Neuron{

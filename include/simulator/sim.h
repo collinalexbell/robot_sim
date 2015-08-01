@@ -6,6 +6,7 @@
 #include <vector>
 #include <unordered_map>
 #include "drawable.h"
+#include "world.h"
 
 class Sim
 {
@@ -26,6 +27,8 @@ class Sim
 
         void draw();
 
+        void make_world(int num_robots, int num_gardens);
+
         unsigned int add_drawable(Drawable* drawable);
 
         SDL_Event event;
@@ -38,6 +41,7 @@ class Sim
         std::vector<bool> gui_tests;
         bool bool_gui_test_finished = false;
         bool bool_gui_result = false;
+        World* world = NULL;
     public:
         std::unordered_map<unsigned int, Drawable*> things_to_draw;
 

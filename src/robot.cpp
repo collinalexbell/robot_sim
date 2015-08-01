@@ -7,11 +7,13 @@
 #include "world.h"
 #include <iostream>
 #include <math.h>
+#include <string>
 
 #define PI 3.14159265
 
 Robot::Robot(){
     init();
+    
 }
 
 Robot::Robot(std::string dna){
@@ -20,17 +22,21 @@ Robot::Robot(std::string dna){
 }
 
 void Robot::init(){
-   position_exists = false; 
-   current_image = IMG_Load("./resources/ball_bot.png");
-   angle = 0;
-   nnet = NULL;
-   fruit_cap = 3;
-   money = 0;
+    
+    position_exists = false; 
+    current_image = IMG_Load("./resources/ball_bot.png");
+    angle = 0;
+    nnet = NULL;
+    num_of_fruit = 0;
+    fruit_cap = 3;
+    money = 0;
 }
 
 void Robot::set_position(int x, int y){
     position.x = x;
     position.y = y;
+    percise_x = x;
+    percise_y = y;
     position_exists = true;
 }
 
@@ -63,25 +69,32 @@ vector<SDL_Surface*> Robot::make_sprites(const char* file){
 
 }
 
+void Robot::give_fruit(){
+    num_of_fruit ++;
+}
+
 const char* file_name = "./resources/ball_bot.png";
 vector<SDL_Surface*> Robot::sprites = Robot::make_sprites(file_name);
 
 void Robot::rotate(int deg){
     angle = modulo((angle + deg), 360);
     current_image = sprites[angle];
-    std::cout<<angle<<std::endl;
+    printf(", robot: %p, angle: %d\n", this, angle);
 
 }
 
 void Robot::move(int distance){
-    int delta_x = distance * round(cos(angle*PI/180));
+    int delta_x = double(distance) * cos(angle*PI/180);
 
     //I want to use quadrant 1 angles and quadrant 4 positions
     //Fuck graphics coors
-    int delta_y = distance * -round(sin(angle*PI/180));
+    int delta_y = -1 * double(distance) * sin(angle*PI/180);
+
+    percise_x = fmod((percise_x + delta_x), 1080);
+    percise_y = fmod((percise_y+ delta_y), 720);
     
-    position.x += delta_x;
-    position.y += delta_y;
+    position.x = (position.x + delta_x)%1080;
+    position.y = (position.y + delta_y)%720;
 
 }
 
@@ -143,13 +156,13 @@ void Robot::step(){
     if(left_turn->get_output() > 0 && right_turn->get_output() == 0){
         printf("angle current: %d\n", angle);
         printf("Turning left\n");
-        rotate(3);
+        rotate(10);
         printf("angle after rotate: %d\n", angle);
     }
     
     if(right_turn->get_output() > 0 && left_turn->get_output() == 0){
         printf("Turning right");
-        rotate(-3);
+        rotate(-10);
     }
 
     if(tail_motor->get_output() > 0){
@@ -166,6 +179,7 @@ void Robot::signal_garden(Garden *garden){
 
 void Robot::harvest(Garden *garden){
     if(garden->harvest()){
+        printf("Should get called2");
         num_of_fruit += 1;
         last_garden = garden;
     }
@@ -175,11 +189,28 @@ int Robot::get_fruit(){
     return num_of_fruit;
 }
 
+int Robot::get_score(){
+    return num_of_fruit + money;
+}
+
 void Robot::sell_a_fruit(){
     if(num_of_fruit > 0){
         money ++;
         num_of_fruit--;
     }
+}
+
+vector<unsigned int> Robot::get_ancestors(){
+    return ancestors;
+}
+
+void Robot::set_ancestors(std::vector<unsigned int> a){
+    ancestors = a;
+}
+
+void Robot::reset_score(){
+    num_of_fruit = 0;
+    money = 0;
 }
 
 Robot::~Robot(){

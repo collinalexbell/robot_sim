@@ -72,6 +72,17 @@ class Robot: public Agent{
 
         int get_money();
 
+        int get_score();
+
+        void give_fruit();
+
+        std::vector<unsigned int>get_ancestors();
+
+        void set_ancestors(vector<unsigned int>);
+
+        void reset_score();
+
+        double percise_x, percise_y;
 
     private:
         //Internal direction
@@ -104,6 +115,8 @@ class Robot: public Agent{
 
         //Earned from selling fruit
         int money;
+        
+        std::vector<unsigned int> ancestors;
 
 };
 

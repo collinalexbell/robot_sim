@@ -6,7 +6,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <fstream>
 #include "drawable.h"
+#include "world.h"
 
 #define MAX_ID 65535
 
@@ -122,7 +124,13 @@ bool Sim::step(){
                 bool_gui_test_finished = true;
                 bool_gui_result = false;
             }
+            if( event.key.keysym.sym == SDLK_m){
+                world->mutate(.3);
+            }
         }
+    }
+    if(world != NULL){
+        world->step();
     }
     draw();
     SDL_Flip(screen);
@@ -143,12 +151,30 @@ bool Sim::get_gui_test_result(int test_id){
 unsigned int Sim::add_drawable(Drawable* drawable){
 
 
+    printf("In add_drawable\n");
     unsigned int uuid = rand() % MAX_ID;
 
     std::pair<unsigned int, Drawable*> insert_me (uuid, drawable);
     things_to_draw.insert(insert_me);
+    printf("made it past insertion\n");
     std::cout<< things_to_draw.size() << std::endl;
 
     return uuid;
+}
+
+void Sim::make_world(int num_robots, int num_gardens){
+    std::ifstream t("resources/prototype_spikingnn.json");
+    std::string json_text((std::istreambuf_iterator<char>(t)),
+        std::istreambuf_iterator<char>());
+
+    int i;
+    world = new World();
+    add_drawable(world);
+    for( i=0; i<num_robots; i++ ){
+        world->add_robot(0,0, json_text);
+    }
+    for( i=0; i<num_gardens; i++ ){
+        world->add_garden(rand()%1080, rand()%720);
+    }
 }
 

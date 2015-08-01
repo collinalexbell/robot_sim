@@ -6,11 +6,9 @@ SRC := src
 BIN := bin
 TEST := tests
 
-simulatormake: main.o sim.o
-	clang++ -o simulator main.o sim.o `sdl-config --cflags --libs` -lSDL_ttf -std=c++11 -stdlib=libc++ 
+simulatormake: main.o sim.o world.o robot.o spiking_nnet.o distance_sensor.o garden.o
+	$(LINK) -o run sim.o world.o robot.o spiking_nnet.o distance_sensor.o garden.o $(SRC)/main.cpp
 
-main.o: $(SRC)/main.cpp
-	$(CLANG) $(SRC)/main.cpp
 
 sim.o: $(SRC)/sim.cpp $(SIM_LIB)/sim.h $(SIM_LIB)/drawable.h $(SIM_LIB)/world.h
 	$(CLANG) $(SRC)/sim.cpp 

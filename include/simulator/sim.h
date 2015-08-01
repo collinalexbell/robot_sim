@@ -25,6 +25,8 @@ class Sim
 
         bool step();
 
+        void em_step();
+
         void draw();
 
         void make_world(int num_robots, int num_gardens);

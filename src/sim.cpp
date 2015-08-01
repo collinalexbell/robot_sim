@@ -176,5 +176,10 @@ void Sim::make_world(int num_robots, int num_gardens){
     for( i=0; i<num_gardens; i++ ){
         world->add_garden(rand()%1080, rand()%720);
     }
+    printf("Making world");
+}
+
+void Sim::em_step(){
+    step();
 }
 

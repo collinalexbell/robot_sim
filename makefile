@@ -1,13 +1,13 @@
 LIB := include/simulator
 SIM_LIB :=  include/simulator
-CLANG := clang++ -std=c++11 -stdlib=libc++ -c -g -I $(LIB)
-LINK := clang++ `sdl-config --cflags --libs` -lSDL_ttf -lSDL_image -lSDL_gfx -std=c++11 -stdlib=libc++ -v -g -I $(LIB)
+CLANG := emcc  -std=c++11 -stdlib=libc++ -c -g -I $(LIB)
+LINK := EMCC_DEBUG=1 emcc  `sdl-config --cflags --libs` -lSDL_ttf -lSDL_image -lSDL_gfx -std=c++11 -stdlib=libc++ -v -g -I $(LIB) --preload-file resources -s ERROR_ON_UNDEFINED_SYMBOLS=1 -s DEMANGLE_SUPPORT=1 -s ALLOW_MEMORY_GROWTH=1 
 SRC := src
 BIN := bin
 TEST := tests
 
-simulatormake: main.o sim.o world.o robot.o spiking_nnet.o distance_sensor.o garden.o
-	$(LINK) -o run sim.o world.o robot.o spiking_nnet.o distance_sensor.o garden.o $(SRC)/main.cpp
+simulatormake: sim.o world.o robot.o spiking_nnet.o distance_sensor.o garden.o
+	$(LINK) -o run.html garden.o distance_sensor.o robot.o sim.o world.o spiking_nnet.o $(SRC)/main.cpp
 
 
 sim.o: $(SRC)/sim.cpp $(SIM_LIB)/sim.h $(SIM_LIB)/drawable.h $(SIM_LIB)/world.h

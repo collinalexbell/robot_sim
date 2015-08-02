@@ -41,8 +41,7 @@ test_sim: sim.o world.o distance_sensor.o robot.o spiking_nnet.o garden.o
 	gdb bin/test_sim
 
 test_robot: robot.o sim.o world.o distance_sensor.o garden.o spiking_nnet.o
-	$(LINK) -o $(BIN)/test_robot robot.o world.o distance_sensor.o garden.o spiking_nnet.o $(TEST)/test_robot.cpp sim.o
-	gdb bin/test_robot
+	$(LINK) -o $(BIN)/test_robot.html robot.o world.o distance_sensor.o garden.o spiking_nnet.o $(TEST)/test_robot.cpp sim.o
 
 test_garden: garden.o
 	$(LINK) -o $(BIN)/test_garden garden.o $(TEST)/test_garden.cpp

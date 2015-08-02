@@ -15,6 +15,11 @@
 Sim::Sim(int w, int h){
     screen_width = w;
     screen_height = h;
+    simTextColor = { 255, 255, 255 };
+    simFont = TTF_OpenFont( "resources/opensans.ttf", 14 );
+    fps_offset = new SDL_Rect();
+    fps_offset->x = 900;
+    fps_offset->y = 720;
 }
 
 SDL_Surface* Sim::get_screen(){
@@ -94,6 +99,8 @@ unsigned int Sim::start_gui_test_bool(char test_text[], bool desired_result){
 
 void Sim::draw(){
     SDL_FillRect(screen, NULL, 0x000000);
+    //printf("size of things_to_draw: %d", things_to_draw.size());
+    //printf("thing to draw %p", things_to_draw.begin()->second);
     for ( auto it = things_to_draw.begin(); it != things_to_draw.end(); ++it ){
 
         //Offset from drawable
@@ -108,7 +115,40 @@ void Sim::draw(){
     } 
 }
 
+void Sim::draw_fps(){
+    unsigned int ticks = SDL_GetTicks();
+    if(last_step != 0){
+            //printf("Last step interval: %u\n", SDL_GetTicks()-last_step);
+            fps[tick_till_print] = double(tick)/(double(ticks-last_step)/double(1000));
+            printf("fps[tick_till_print]: %f", fps[tick_till_print]);
+            printf(", tick_till_print: %d\n", tick_till_print);
+            tick = 1;
+    }
+    tick_till_print++;
+    //printf("tick_till_print: %d", tick_till_print);
+    if(tick_till_print == 10){
+        printf("Should average now\n");
+        fps_to_print = 0;
+        for( int i=0; i<10; i++ ){
+            printf("i = %d", i);
+            fps_to_print += fps[i];
+        }
+        fps_to_print /= 10;
+        tick_till_print = 0;
+        
+    }
+    last_step = SDL_GetTicks(); 
+
+    SDL_Surface* message;
+    char test_text[10];
+    sprintf(test_text, "%f", fps_to_print);
+
+    message = TTF_RenderText_Solid( simFont, test_text, simTextColor );
+    SDL_BlitSurface(message, NULL, screen, fps_offset);
+}
+
 bool Sim::step(){
+    
     if( SDL_PollEvent( &event ) ) {
         //If the user has Xed out the window 
         if( event.type == SDL_QUIT ) {
@@ -133,6 +173,7 @@ bool Sim::step(){
         world->step();
     }
     draw();
+    draw_fps();
     SDL_Flip(screen);
     return true;
 }

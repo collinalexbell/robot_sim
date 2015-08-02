@@ -58,6 +58,13 @@ TEST_CASE( "Sim can run a full world simulation" ){
     gui_test(sim, "Sim makes a new world of 10 robots and 3 gardens and runs the sim", true);
 }
 
+TEST_CASE( "Sim prints the fps" ){
+    Sim *sim = new Sim(1080, 780);
+    sim->init();
+    sim->make_world(10,3); 
+    gui_test(sim, "sim shows fps", true);
+}
+
 
 int main( int argc, char* argv[] )
 {

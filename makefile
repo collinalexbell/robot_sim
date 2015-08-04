@@ -1,7 +1,7 @@
 LIB := include/simulator
 SIM_LIB :=  include/simulator
-CLANG := clang++ -std=c++11 -stdlib=libc++ -c -g -I $(LIB)
-LINK := clang++ `sdl-config --cflags --libs` -lSDL_ttf -lSDL_image -lSDL_gfx -std=c++11 -stdlib=libc++ -v -g -I $(LIB)
+CLANG := clang++ -O3 -std=c++11 -stdlib=libc++ -c -g -I $(LIB)
+LINK := clang++ -O3 `sdl-config --cflags --libs` -lSDL_ttf -lSDL_image -lSDL_gfx -std=c++11 -stdlib=libc++ -v -g -I $(LIB)
 SRC := src
 BIN := bin
 TEST := tests

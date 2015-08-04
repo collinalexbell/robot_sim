@@ -16,10 +16,11 @@ Sim::Sim(int w, int h){
     screen_width = w;
     screen_height = h;
     simTextColor = { 255, 255, 255 };
-    simFont = TTF_OpenFont( "resources/opensans.ttf", 14 );
+    
     fps_offset = new SDL_Rect();
     fps_offset->x = 900;
     fps_offset->y = 720;
+    fps = std::vector<double>(10,0);
 }
 
 SDL_Surface* Sim::get_screen(){
@@ -30,8 +31,10 @@ void Sim::init(){
     srand (time(NULL));
     SDL_Init(SDL_INIT_EVERYTHING);
     TTF_Init();
-    screen = SDL_SetVideoMode(screen_width, screen_height, 32, SDL_SWSURFACE);
+    screen = SDL_SetVideoMode(screen_width, screen_height, 32, SDL_HWSURFACE);
     running = true;
+    printf("Opening font");
+    font = TTF_OpenFont( "resources/opensans.ttf", 14 );
 
 #ifdef TEST_SDL_LOCK_OPTS
     EM_ASM("SDL.defaults.copyOnLock = false; SDL.defaults.discardOnLock = true; SDL.defaults.opaqueFrontBuffer = false;");
@@ -63,7 +66,6 @@ void Sim::quit_sdl(){
 unsigned int Sim::start_gui_test_bool(char test_text[], bool desired_result){
     bool_gui_test_finished = false;
     int rv = 0;
-    TTF_Font *font = NULL;
     SDL_Surface *message = NULL;
     SDL_Surface *message2 = NULL;
     SDL_Surface *full_message = SDL_CreateRGBSurface(0,1080, 40, 32,0,0,0,0);
@@ -75,7 +77,6 @@ unsigned int Sim::start_gui_test_bool(char test_text[], bool desired_result){
     yes_no_offset->x = 0;
 
     SDL_Color textColor = { 255, 255, 255 };
-    font = TTF_OpenFont( "resources/opensans.ttf", 14 );
     message = TTF_RenderText_Solid( font, test_text, textColor );
     std::cout << SDL_GetError();
     message2 = TTF_RenderText_Solid( font, "Press Y/N", textColor );
@@ -98,13 +99,12 @@ unsigned int Sim::start_gui_test_bool(char test_text[], bool desired_result){
 }
 
 void Sim::draw(){
-    SDL_FillRect(screen, NULL, 0x000000);
     //printf("size of things_to_draw: %d", things_to_draw.size());
     //printf("thing to draw %p", things_to_draw.begin()->second);
+    SDL_Rect *offset = new SDL_Rect();
     for ( auto it = things_to_draw.begin(); it != things_to_draw.end(); ++it ){
 
         //Offset from drawable
-        SDL_Rect *offset = new SDL_Rect();
         offset->x = it->second->get_position().x;
         offset->y = it->second->get_position().y;
         
@@ -113,17 +113,18 @@ void Sim::draw(){
 
         SDL_BlitSurface(surf, NULL, screen, offset);
     } 
+
+    delete offset;
 }
 
 void Sim::draw_fps(){
     unsigned int ticks = SDL_GetTicks();
-    if(last_step != 0){
-            //printf("Last step interval: %u\n", SDL_GetTicks()-last_step);
-            fps[tick_till_print] = double(tick)/(double(ticks-last_step)/double(1000));
-            printf("fps[tick_till_print]: %f", fps[tick_till_print]);
-            printf(", tick_till_print: %d\n", tick_till_print);
-            tick = 1;
+    //printf("Last step interval: %u\n", SDL_GetTicks()-last_step);
+    if(ticks-last_step != 0){
+        fps[tick_till_print] = 1/(double(ticks-last_step)/double(1000));
     }
+    //printf("fps[tick_till_print]: %f", fps[tick_till_print]);
+    //printf(", tick_till_print: %d\n", tick_till_print);
     tick_till_print++;
     //printf("tick_till_print: %d", tick_till_print);
     if(tick_till_print == 10){
@@ -139,12 +140,12 @@ void Sim::draw_fps(){
     }
     last_step = SDL_GetTicks(); 
 
-    SDL_Surface* message;
-    char test_text[10];
+    SDL_Surface* the_message;
+    char test_text[30];
     sprintf(test_text, "%f", fps_to_print);
 
-    message = TTF_RenderText_Solid( simFont, test_text, simTextColor );
-    SDL_BlitSurface(message, NULL, screen, fps_offset);
+    the_message = TTF_RenderText_Solid( font, test_text, simTextColor );
+    SDL_BlitSurface(the_message, NULL, screen, fps_offset);
 }
 
 bool Sim::step(){
@@ -192,15 +193,20 @@ bool Sim::get_gui_test_result(int test_id){
 unsigned int Sim::add_drawable(Drawable* drawable){
 
 
-    printf("In add_drawable\n");
     unsigned int uuid = rand() % MAX_ID;
 
     std::pair<unsigned int, Drawable*> insert_me (uuid, drawable);
     things_to_draw.insert(insert_me);
-    printf("made it past insertion\n");
-    std::cout<< things_to_draw.size() << std::endl;
 
     return uuid;
+}
+
+std::vector<unsigned int> Sim::add_drawables(std::vector<Drawable*> drawables){
+    std::vector<unsigned int> rv;
+    for( auto it = drawables.begin(); it != drawables.end(); it++){
+        rv.push_back(add_drawable(*it));
+    }
+    return rv;
 }
 
 void Sim::make_world(int num_robots, int num_gardens){

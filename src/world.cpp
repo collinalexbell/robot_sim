@@ -16,10 +16,14 @@
 #define MAX_ID 65535
 
 World::World(){
+    SDL_Surface *tmp;
     srand (time(NULL));
     width = 1080;
     height = 720;
-    world_surf = SDL_CreateRGBSurface(0,width, height, 32,0,0,0,0);
+    tmp = SDL_CreateRGBSurface(0,width, height, 32,0,0,0,0);
+    world_surf = SDL_DisplayFormat(tmp);
+    SDL_FreeSurface(tmp);
+    SDL_SetAlpha(world_surf, 0, 0);
     background = make_background();
     last_mutate_time = time(NULL);
     mutate_time = 60;
@@ -138,7 +142,7 @@ Garden* World::get_garden(unsigned int id){
 }
 
 SDL_Surface* World::get_image(){
-    SDL_FillRect(world_surf, NULL, 0x000000);
+    //SDL_FillRect(world_surf, NULL, 0x000000);
     SDL_Rect* offset = new SDL_Rect();
 
     //Blit background
@@ -171,6 +175,21 @@ SDL_Surface* World::get_image(){
     return world_surf;
 }
 
+std::vector<Drawable*> World::get_drawables(){
+    std::vector<Drawable*> rv;
+    Point p = {0, 0};
+    Basic_Drawable *bk = new Basic_Drawable(background, p);
+    rv.push_back(bk);
+    printf("num of bots: %d", garden_vec.size());
+    for ( auto it = garden_vec.begin(); it != garden_vec.end(); ++it ){
+        rv.push_back(*it);
+    }
+    for ( auto it = robot_vec.begin(); it != robot_vec.end(); ++it ){
+        rv.push_back(*it);
+    }
+    return rv;
+}
+
 Point World::get_position(){
     Point rv = {0,0};
     return rv;
@@ -197,7 +216,9 @@ SDL_Surface* World::make_background(){
 
     delete offset;
     offset = NULL;
-    return bk_surf;
+    SDL_SetAlpha(bk_surf, 0, 0);
+    return SDL_DisplayFormat(bk_surf);
+    //return bk_surf;
 }
 
 vector<Garden*> World::get_gardens(){

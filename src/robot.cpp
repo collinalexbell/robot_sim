@@ -22,9 +22,12 @@ Robot::Robot(std::string dna){
 }
 
 void Robot::init(){
+    SDL_Surface* tmp;
     
     position_exists = false; 
-    current_image = IMG_Load("./resources/ball_bot.png");
+    tmp = IMG_Load("./resources/ball_bot.png");
+    current_image = SDL_DisplayFormatAlpha(tmp);
+    SDL_FreeSurface(tmp);
     angle = 0;
     nnet = NULL;
     num_of_fruit = 0;
@@ -56,14 +59,18 @@ SDL_Surface* Robot::get_image(){
 
 vector<SDL_Surface*> Robot::make_sprites(const char* file){
     int i;
-    SDL_Surface* sprite = IMG_Load("./resources/ball_bot.png");
+    SDL_Surface *tmp1, *tmp2, *sprite;
+    sprite  = IMG_Load("./resources/ball_bot.png");
     SDL_Surface* point;
     vector<SDL_Surface*> rv;
 
     for ( i=0; i<=360; i++ ){
-        rv.push_back(rotozoomSurface(sprite, i, 1, NULL));
-
+        tmp1 = rotozoomSurface(sprite, i, 1, NULL);
+        //tmp2 = SDL_DisplayFormatAlpha(tmp1);
+        rv.push_back(tmp1);
+        SDL_FreeSurface(tmp1);
     }
+    SDL_FreeSurface(sprite);
 
     return rv;
 

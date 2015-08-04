@@ -33,6 +33,7 @@ class World: public Drawable{
         void mutate(double ratio_to_reproduce);
         void handle_robot_garden_collisions();
         bool check_collision(SDL_Rect, SDL_Rect);
+        std::vector<Drawable*> get_drawables();
 
     private:
         int last_mutate_time;

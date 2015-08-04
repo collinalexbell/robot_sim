@@ -49,7 +49,9 @@ TEST_CASE( "world can add and draw robots" ){
     sim->init();
 
     World* world = new World();
-    world->add_robot(100,100);
+    for( int i=0; i<100; i++){
+        world->add_robot(i,i);
+    }
 
     sim->add_drawable(world);
 
@@ -177,6 +179,22 @@ TEST_CASE("Mutate World"){
     for( auto it=victors.begin(); it!=victors.end(); it++ ){
         REQUIRE((*it)->get_score() == 0);
     }
+
+}
+
+TEST_CASE("World can get_drawables"){
+    int i;
+    Sim* sim = new Sim(1080, 760);
+    sim->init();
+    World* world = new World();
+    for(i=0;i<5;i++){
+        world->add_robot(100, i*20);
+    }
+
+    sim->add_drawables(world->get_drawables());
+
+    gui_test(sim, "Robots get drawn", true);
+
 
 }
 

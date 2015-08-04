@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include "drawable.h"
 #include "world.h"
+#include "map"
 
 class Sim
 {
@@ -34,6 +35,8 @@ class Sim
 
         unsigned int add_drawable(Drawable* drawable);
 
+        std::vector<unsigned int> add_drawables(std::vector<Drawable*> drawables);
+
         SDL_Event event;
         SDL_Surface *screen;
 
@@ -49,14 +52,15 @@ class Sim
         unsigned int last_fps_print = 0;
         int tick = 0;
         int tick_till_print = 0;
-        double* fps = new double[10];
+        vector<double> fps;
         double fps_to_print;
-        TTF_Font *simFont;
+        TTF_Font *font = NULL;
         SDL_Color simTextColor;
         SDL_Rect *fps_offset;
 
     public:
-        std::unordered_map<unsigned int, Drawable*> things_to_draw;
+        std::map<unsigned int, Drawable*> things_to_draw;
+        std::vector<Drawable*> drawables;
 
 };
 
